@@ -1,4 +1,4 @@
-package ec.edu.ups;
+package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Producto;
 
