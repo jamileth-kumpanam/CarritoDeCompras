@@ -12,11 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class CarritoController {
-
-    private final CarritoDAO carritoDAO;
-    private final ProductoDAO productoDAO;
-    private final CarritoAnadirView carritoAnadirView;
+public class CarritoController{
+    private CarritoDAO carritoDAO;
+    private CarritoAnadirView carritoAniadirView;
+    private ProductoDAO productoDAO;
     private Carrito carrito;
 
     public CarritoController(CarritoDAO carritoDAO,
@@ -24,68 +23,77 @@ public class CarritoController {
                              CarritoAnadirView carritoAnadirView) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
-        this.carritoAnadirView = carritoAnadirView;
+        this.carritoAniadirView = carritoAnadirView;
         this.carrito = new Carrito();
-        configurarEventosEnVistas();
+        configurarEventosVistas();
     }
 
-    private void configurarEventosEnVistas() {
-        carritoAnadirView.getBtnAnadir().addActionListener(new ActionListener() {
+    private void configurarEventosVistas(){
+
+
+        carritoAniadirView.getAgregarButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 anadirProducto();
+
             }
         });
-
-        carritoAnadirView.getBtnGuardar().addActionListener(new ActionListener() {
+        carritoAniadirView.getGuardarButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 guardarCarrito();
             }
         });
+        carritoAniadirView.getCancelarButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
     }
-
-    private void guardarCarrito() {
-        carritoDAO.crear(carrito);
-        carritoAnadirView.mostrarMensaje("Carrito creado correctamente");
-        System.out.println(carritoDAO.listarTodos());
-    }
-
-    private void anadirProducto() {
-
-        int codigo = Integer.parseInt(carritoAnadirView.getTxtCodigo().getText());
-        Producto producto = productoDAO.buscarPorCodigo(codigo);
-        int cantidad =  Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
-        carrito.agregarProducto(producto, cantidad);
+    private void anadirProducto(){
+        Producto producto = productoDAO.buscarPorCodigo(Integer.parseInt(carritoAniadirView.getTextCodigo().getText()));
+        int cantidad = Integer.parseInt(carritoAniadirView.getComboCantidad().getSelectedItem().toString());
+        carrito.agregarProducto(producto,cantidad);
 
         cargarProductos();
         mostrarTotales();
 
     }
-
     private void cargarProductos(){
-
         List<ItemCarrito> items = carrito.obtenerItems();
-        DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
+        DefaultTableModel modelo= (DefaultTableModel) carritoAniadirView.getTable1().getModel();
         modelo.setNumRows(0);
-        for (ItemCarrito item : items) {
-            modelo.addRow(new Object[]{ item.getProducto().getCodigo(),
+        for(ItemCarrito item : items){
+            modelo.addRow(new Object[]{item.getProducto().getCodigo(),
                     item.getProducto().getNombre(),
                     item.getProducto().getPrecio(),
                     item.getCantidad(),
-                    item.getProducto().getPrecio() * item.getCantidad() });
+                    item.getProducto().getPrecio()* item.getCantidad()});
+
         }
     }
-
+    private void guardarCarrito(){
+        carritoDAO.crear(carrito);
+        carritoAniadirView.mostrarMensaje("Carrito creado completamente");
+        System.out.println(carritoDAO.listarTodos());
+    }
     private void mostrarTotales(){
         String subtotal = String.valueOf(carrito.calcularSubtotal());
         String iva = String.valueOf(carrito.calcularIVA());
         String total = String.valueOf(carrito.calcularTotal());
 
-        carritoAnadirView.getTxtSubtotal().setText(subtotal);
-        carritoAnadirView.getTxtIva().setText(iva);
-        carritoAnadirView.getTxtTotal().setText(total);
+        carritoAniadirView.getTextSubtotal().setText(subtotal);
+        carritoAniadirView.getTextIVA().setText(iva);
+        carritoAniadirView.getTextTotal().setText(total);
     }
 
+    private void cancelarCarrito(){
+
+
+
+    }
 
 }

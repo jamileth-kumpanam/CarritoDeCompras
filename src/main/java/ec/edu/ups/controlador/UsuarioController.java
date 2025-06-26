@@ -1,14 +1,14 @@
 package ec.edu.ups.controlador;
 
-import ec.edu.ups.dao.UsuarioDAO;
-import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.vista.LoginView;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class UsuarioController {
+import ec.edu.ups.dao.UsuarioDAO;
+import ec.edu.ups.modelo.Rol;
+import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.vista.LoginView;
 
+public class UsuarioController {
     private Usuario usuario;
     private final UsuarioDAO usuarioDAO;
     private final LoginView loginView;
@@ -21,17 +21,26 @@ public class UsuarioController {
     }
 
     private void configurarEventosEnVistas(){
-        loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
+        loginView.getIniciarSesiónButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autenticar();
             }
         });
+        loginView.getRegistrarseButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registrarUsuario();
+                loginView.mostrarMensaje("Usuario registrado");
+                limpiar();
+            }
+        });
+
     }
 
     private void autenticar(){
-        String username = loginView.getTxtUsername().getText();
-        String contrasenia = loginView.getTxtContrasenia().getText();
+        String username = loginView.getUsuarioText().getText();
+        String contrasenia = loginView.getContraText().getText();
 
         usuario = usuarioDAO.autenticar(username, contrasenia);
         if(usuario == null){
@@ -40,8 +49,19 @@ public class UsuarioController {
             loginView.dispose();
         }
     }
+    private void limpiar(){
+        loginView.getUsuarioText().setText("");
+        loginView.getContraText().setText("");
+    }
 
     public Usuario getUsuarioAutenticado(){
         return usuario;
+    }
+    public void registrarUsuario(){
+        String username = loginView.getUsuarioText().getText();
+        String contrasenia = loginView.getContraText().getText();
+
+        Usuario usuarioNuevo= new Usuario(username, contrasenia, Rol.USUARIO);
+        usuarioDAO.crear(usuarioNuevo);
     }
 }

@@ -23,7 +23,6 @@ public class Main {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                //Iniciar sesión
                 UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
                 LoginView loginView = new LoginView();
                 loginView.setVisible(true);
@@ -36,18 +35,15 @@ public class Main {
 
                         Usuario usuarioAuntenticado = usuarioController.getUsuarioAutenticado();
                         if (usuarioAuntenticado != null) {
-                            //instanciamos DAO (Singleton)
+
                             ProductoDAO productoDAO = new ProductoDAOMemoria();
                             CarritoDAO carritoDAO = new CarritoDAOMemoria();
 
-                            //instancio Vistas
                             MenuPrincipalView principalView = new MenuPrincipalView();
-                            ProductoAnadirView productoAnadirView = new ProductoAnadirView();
+                            ProductoAniadirView productoAnadirView = new ProductoAniadirView();
                             ProductoListaView productoListaView = new ProductoListaView();
                             CarritoAnadirView carritoAnadirView = new CarritoAnadirView();
 
-
-                            //instanciamos Controladores
                             ProductoController productoController = new ProductoController(productoDAO, productoAnadirView, productoListaView, carritoAnadirView);
                             CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAnadirView);
 
