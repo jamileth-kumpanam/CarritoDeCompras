@@ -30,7 +30,7 @@ public class CarritoController {
     }
 
     private void configurarEventosEnVistas() {
-        carritoAnadirView.getBtnAñadir().addActionListener(new ActionListener() {
+        carritoAnadirView.getBtnAnadir().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 anadirProducto();
@@ -55,7 +55,7 @@ public class CarritoController {
 
         int codigo = Integer.parseInt(carritoAnadirView.getTxtCodigo().getText());
         Producto producto = productoDAO.buscarPorCodigo(codigo);
-        int cantidad =  Integer.parseInt(carritoAnadirView.getCBoxCantidad().getSelectedItem().toString());
+        int cantidad =  Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
         carrito.agregarProducto(producto, cantidad);
 
         cargarProductos();
@@ -66,7 +66,7 @@ public class CarritoController {
     private void cargarProductos(){
 
         List<ItemCarrito> items = carrito.obtenerItems();
-        DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblCarrito().getModel();
+        DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
         modelo.setNumRows(0);
         for (ItemCarrito item : items) {
             modelo.addRow(new Object[]{ item.getProducto().getCodigo(),
@@ -83,9 +83,9 @@ public class CarritoController {
         String total = String.valueOf(carrito.calcularTotal());
 
         carritoAnadirView.getTxtSubtotal().setText(subtotal);
-        carritoAnadirView.getTxtIVA().setText(iva);
+        carritoAnadirView.getTxtIva().setText(iva);
         carritoAnadirView.getTxtTotal().setText(total);
     }
 
-//FAFMMFD
+
 }

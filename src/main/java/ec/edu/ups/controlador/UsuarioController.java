@@ -21,7 +21,7 @@ public class UsuarioController {
     }
 
     private void configurarEventosEnVistas(){
-        loginView.getBtnIngresar().addActionListener(new ActionListener() {
+        loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 autenticar();
@@ -30,8 +30,8 @@ public class UsuarioController {
     }
 
     private void autenticar(){
-        String username = loginView.getTxtUsuario().getText();
-        String contrasenia = loginView.getTxtContraseña().getText();
+        String username = loginView.getTxtUsername().getText();
+        String contrasenia = loginView.getTxtContrasenia().getText();
 
         usuario = usuarioDAO.autenticar(username, contrasenia);
         if(usuario == null){
@@ -44,4 +44,4 @@ public class UsuarioController {
     public Usuario getUsuarioAutenticado(){
         return usuario;
     }
-}//usuaeiik
+}
