@@ -8,25 +8,17 @@ public class CarritoAnadirView extends JInternalFrame{
     private JTable table1;
     private JButton guardarButton;
     private JButton cancelarButton;
-    private JTextField codigo;
-    private JTextField nombre;
-    private JTextField precio;
+    private JTextField textCodigo;
+    private JTextField textField2;
+    private JTextField textField3;
     private JTextField textCantidad;
-    private JTextField subTotaltxt;
-    private JTextField iva;
-    private JTextField total;
+    private JTextField textSubtotal;
+    private JTextField textIVA;
+    private JTextField textTotal;
     private JButton buscarButton;
     private JButton agregarButton;
-    private JComboBox cantidad;
+    private JComboBox comboCantidad;
     private JTextField textFecha;
-    private JLabel codigotxt;
-    private JLabel nombretxt;
-    private JLabel ptrciotxt;
-    private JLabel cantidadtxt;
-    private JLabel fechatxt;
-    private JLabel subtotaltxt;
-    private JLabel ivatxt;
-    private JLabel totaltxt;
     private DefaultTableModel modelo;
 
     public CarritoAnadirView(){
@@ -43,7 +35,7 @@ public class CarritoAnadirView extends JInternalFrame{
         cargarDatos();
 
         DefaultTableModel modelo = new DefaultTableModel();
-        Object[] columnas = {"Codigo", "Nombre", "Precio", "cantidad", "Subtotal"};
+        Object[] columnas = {"Codigo", "Nombre", "Precio", "Cantidad", "Subtotal"};
         modelo.setColumnIdentifiers(columnas);
         table1.setModel(modelo);
     }
@@ -90,27 +82,27 @@ public class CarritoAnadirView extends JInternalFrame{
     }
 
     public JTextField getTextField1() {
-        return codigo;
+        return textCodigo;
     }
 
     public void setTextField1(JTextField textField1) {
-        this.codigo = textField1;
+        this.textCodigo = textField1;
     }
 
     public JTextField getTextField2() {
-        return nombre;
+        return textField2;
     }
 
     public void setTextField2(JTextField textField2) {
-        this.nombre = textField2;
+        this.textField2 = textField2;
     }
 
     public JTextField getTextField3() {
-        return precio;
+        return textField3;
     }
 
     public void setTextField3(JTextField textField3) {
-        this.precio = textField3;
+        this.textField3 = textField3;
     }
 
     public JTextField getTextField4() {
@@ -122,27 +114,27 @@ public class CarritoAnadirView extends JInternalFrame{
     }
 
     public JTextField getTextField5() {
-        return subTotaltxt;
+        return textSubtotal;
     }
 
     public void setTextField5(JTextField textField5) {
-        this.subTotaltxt = textField5;
+        this.textSubtotal = textField5;
     }
 
     public JTextField getTextField6() {
-        return iva;
+        return textIVA;
     }
 
     public void setTextField6(JTextField textField6) {
-        this.iva = textField6;
+        this.textIVA = textField6;
     }
 
     public JTextField getTextField7() {
-        return total;
+        return textTotal;
     }
 
     public void setTextField7(JTextField textField7) {
-        this.total = textField7;
+        this.textTotal = textField7;
     }
 
     public JButton getBuscarButton() {
@@ -170,11 +162,11 @@ public class CarritoAnadirView extends JInternalFrame{
     }
 
     public JTextField getTextCodigo() {
-        return codigo;
+        return textCodigo;
     }
 
     public void setTextCodigo(JTextField textCodigo) {
-        this.codigo = textCodigo;
+        this.textCodigo = textCodigo;
     }
 
     public JTextField getTextCantidad() {
@@ -186,46 +178,45 @@ public class CarritoAnadirView extends JInternalFrame{
     }
 
     public JTextField getTextSubtotal() {
-        return subTotaltxt;
+        return textSubtotal;
     }
 
     public void setTextSubtotal(JTextField textSubtotal) {
-        this.subTotaltxt = textSubtotal;
+        this.textSubtotal = textSubtotal;
     }
 
     public JTextField getTextIVA() {
-        return iva;
+        return textIVA;
     }
 
     public void setTextIVA(JTextField textIVA) {
-        this.iva = textIVA;
+        this.textIVA = textIVA;
     }
 
     public JTextField getTextTotal() {
-        return total;
+        return textTotal;
     }
 
     public void setTextTotal(JTextField textTotal) {
-        this.total = textTotal;
+        this.textTotal = textTotal;
     }
 
     public JComboBox getComboCantidad() {
-        return cantidad;
+        return comboCantidad;
     }
 
     public void setComboCantidad(JComboBox comboCantidad) {
-        this.cantidad = comboCantidad;
+        this.comboCantidad = comboCantidad;
     }
 
     private void cargarDatos(){
-        cantidad.removeAllItems();
+        comboCantidad.removeAllItems();
         for(int i = 0; i < 20; i++){
-            cantidad.addItem(String.valueOf(i + 1));
+            comboCantidad.addItem(String.valueOf(i + 1));
         }
     }
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
-
 }

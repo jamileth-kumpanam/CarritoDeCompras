@@ -55,7 +55,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="5dcc8" class="javax.swing.JTable" binding="table1" default-binding="true">
+                  <component id="5dcc8" class="javax.swing.JTable" binding="tblCarrito">
                     <constraints/>
                     <properties>
                       <background color="-996886"/>
@@ -83,7 +83,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="558e8" class="javax.swing.JLabel" binding="codigotxt">
+                  <component id="558e8" class="javax.swing.JTextField" binding="txtCodigo">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -93,7 +93,7 @@
                       <text value="Codigo: "/>
                     </properties>
                   </component>
-                  <component id="5302b" class="javax.swing.JLabel" binding="nombretxt">
+                  <component id="5302b" class="javax.swing.JTextField" binding="txtNombre">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -103,7 +103,7 @@
                       <text value="Nombre: "/>
                     </properties>
                   </component>
-                  <component id="dda28" class="javax.swing.JLabel" binding="ptrciotxt">
+                  <component id="dda28" class="javax.swing.JTextField" binding="txtPrecio">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -155,7 +155,7 @@
                       <enabled value="false"/>
                     </properties>
                   </component>
-                  <component id="5752d" class="javax.swing.JButton" binding="buscarButton" default-binding="true">
+                  <component id="5752d" class="javax.swing.JButton" binding="btnBuscar">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -163,7 +163,7 @@
                       <text value="Buscar"/>
                     </properties>
                   </component>
-                  <component id="f14f2" class="javax.swing.JButton" binding="agregarButton" default-binding="true">
+                  <component id="f14f2" class="javax.swing.JButton" binding="btnAgregarProducto" custom-create="true">
                     <constraints>
                       <grid row="3" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -171,7 +171,7 @@
                       <text value="Agregar"/>
                     </properties>
                   </component>
-                  <component id="66f1a" class="javax.swing.JComboBox" binding="cantidad">
+                  <component id="66f1a" class="javax.swing.JComboBox" binding="comboCantidad">
                     <constraints>
                       <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -191,7 +191,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="601a0" class="javax.swing.JButton" binding="guardarButton" default-binding="true">
+              <component id="601a0" class="javax.swing.JButton" binding="btnGuardar">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -199,7 +199,7 @@
                   <text value="Guardar"/>
                 </properties>
               </component>
-              <component id="3319e" class="javax.swing.JButton" binding="cancelarButton" default-binding="true">
+              <component id="3319e" class="javax.swing.JButton" binding="btnCancelar">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -275,7 +275,7 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="67ed8" class="javax.swing.JLabel" binding="subtotaltxt">
+                  <component id="67ed8" class="javax.swing.JTextField" binding="txtSubtotal">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -296,7 +296,7 @@
                       <enabled value="false"/>
                     </properties>
                   </component>
-                  <component id="6a56b" class="javax.swing.JLabel" binding="ivatxt">
+                  <component id="6a56b" class="javax.swing.JTextField" binding="txtIVA">
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -317,7 +317,7 @@
                       <enabled value="false"/>
                     </properties>
                   </component>
-                  <component id="11498" class="javax.swing.JLabel" binding="totaltxt">
+                  <component id="11498" class="javax.swing.JTextField" binding="txtTotal">
                     <constraints>
                       <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>

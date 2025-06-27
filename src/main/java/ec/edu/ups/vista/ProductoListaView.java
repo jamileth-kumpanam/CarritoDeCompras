@@ -91,7 +91,5 @@ public class ProductoListaView extends JInternalFrame {
             };
             modelo.addRow(fila);
         }
-
-
     }
 }

@@ -43,9 +43,17 @@ public class Main {
                             ProductoAniadirView productoAnadirView = new ProductoAniadirView();
                             ProductoListaView productoListaView = new ProductoListaView();
                             CarritoAnadirView carritoAnadirView = new CarritoAnadirView();
+                            ProductoEliminarView productoDeleteView = new ProductoEliminarView();
+                            ActualizarProductos actualizar = new ActualizarProductos();
 
-                            ProductoController productoController = new ProductoController(productoDAO, productoAnadirView, productoListaView, carritoAnadirView);
-                            CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAnadirView);
+                            ProductoController productoController = new ProductoController(
+                                    productoDAO,
+                                    productoAnadirView,
+                                    productoListaView,
+                                    productoDeleteView,
+                                    actualizar,
+                                    carritoAnadirView
+                            );                            CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, carritoAnadirView);
 
                             principalView.mostrarMensaje("Bienvenido: " + usuarioAuntenticado.getUsername());
                             if (usuarioAuntenticado.getRol().equals(Rol.USUARIO)) {
@@ -55,30 +63,50 @@ public class Main {
                             principalView.getMenuItemCrearProducto().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    if(!productoAnadirView.isVisible()){
-                                        productoAnadirView.setVisible(true);
-                                        principalView.getjDesktopPane().add(productoAnadirView);
+                                    if (productoAnadirView.getParent() == null) {
+                                        principalView.getJDesktopPane().add(productoAnadirView);
                                     }
+                                    productoAnadirView.setVisible(true);
                                 }
                             });
 
                             principalView.getMenuItemBuscarProducto().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    if(!productoListaView.isVisible()){
-                                        productoListaView.setVisible(true);
-                                        principalView.getjDesktopPane().add(productoListaView);
+                                    if (productoListaView.getParent() == null) {
+                                        principalView.getJDesktopPane().add(productoListaView);
                                     }
+                                    productoListaView.setVisible(true);
                                 }
                             });
 
                             principalView.getMenuItemCrearCarrito().addActionListener(new ActionListener() {
                                 @Override
                                 public void actionPerformed(ActionEvent e) {
-                                    if(!carritoAnadirView.isVisible()){
-                                        carritoAnadirView.setVisible(true);
-                                        principalView.getjDesktopPane().add(carritoAnadirView);
+                                    if (carritoAnadirView.getParent() == null) {
+                                        principalView.getJDesktopPane().add(carritoAnadirView);
                                     }
+                                    carritoAnadirView.setVisible(true);
+                                }
+                            });
+
+                            principalView.getMenuItemEliminarProducto().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if (productoDeleteView.getParent() == null) {
+                                        principalView.getJDesktopPane().add(productoDeleteView);
+                                    }
+                                    productoDeleteView.setVisible(true);
+                                }
+                            });
+
+                            principalView.getMenuItemActualizarProducto().addActionListener(new ActionListener() {
+                                @Override
+                                public void actionPerformed(ActionEvent e) {
+                                    if (actualizar.getParent() == null) {
+                                        principalView.getJDesktopPane().add(actualizar);
+                                    }
+                                    actualizar.setVisible(true);
                                 }
                             });
 
@@ -107,4 +135,5 @@ public class Main {
                 });
             }
         });
-    }}
+    }
+}

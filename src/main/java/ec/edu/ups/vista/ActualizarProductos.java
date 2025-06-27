@@ -1,3 +1,4 @@
+
 package ec.edu.ups.vista;
 
 import javax.swing.*;
@@ -5,14 +6,14 @@ import javax.swing.*;
 public class ActualizarProductos extends JInternalFrame {
 
     private JPanel panelPrincipal;
-    private JTextField Idtxt;
-    private JTextField nombre2txt;
-    private JTextField precio2txt;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
     private JButton cancelarButton;
     private JButton modificarButton;
     private JButton buscarButton;
-    private JTextField nombretxt;
-    private JTextField preciotxt;
+    private JTextField textNombreShow;
+    private JTextField textPrecioShow;
 
     public ActualizarProductos(){
         setContentPane(panelPrincipal);
@@ -34,19 +35,19 @@ public class ActualizarProductos extends JInternalFrame {
     }
 
     public JTextField getTextNombreShow() {
-        return nombretxt;
+        return textNombreShow;
     }
 
     public void setTextNombreShow(JTextField textNombreShow) {
-        this.nombretxt = textNombreShow;
+        this.textNombreShow = textNombreShow;
     }
 
     public JTextField getTextPrecioShow() {
-        return preciotxt;
+        return textPrecioShow;
     }
 
     public void setTextPrecioShow(JTextField textPrecioShow) {
-        this.preciotxt = textPrecioShow;
+        this.textPrecioShow = textPrecioShow;
     }
 
     public JPanel getPanelPrincipal() {
@@ -58,27 +59,27 @@ public class ActualizarProductos extends JInternalFrame {
     }
 
     public JTextField getTextField1() {
-        return Idtxt;
+        return textField1;
     }
 
     public void setTextField1(JTextField textField1) {
-        this.Idtxt = textField1;
+        this.textField1 = textField1;
     }
 
     public JTextField getTextField2() {
-        return nombre2txt;
+        return textField2;
     }
 
     public void setTextField2(JTextField textField2) {
-        this.nombre2txt = textField2;
+        this.textField2 = textField2;
     }
 
     public JTextField getTextField3() {
-        return precio2txt;
+        return textField3;
     }
 
     public void setTextField3(JTextField textField3) {
-        this.precio2txt = textField3;
+        this.textField3 = textField3;
     }
 
     public JButton getCancelarButton() {

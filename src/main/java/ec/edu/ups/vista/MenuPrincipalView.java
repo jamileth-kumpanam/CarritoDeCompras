@@ -56,10 +56,9 @@ public class MenuPrincipalView extends JFrame {
         return menuItemCrearCarrito;
     }
 
-    public JDesktopPane getjDesktopPane() {
+    public JDesktopPane getJDesktopPane() {
         return jDesktopPane;
     }
-
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
@@ -167,5 +166,4 @@ public class MenuPrincipalView extends JFrame {
         menuItemSalir.setText(mensajeInternacionalizacionHandler.get("menu.salir.salir"));
         menuItemCerrarSesion.setText(mensajeInternacionalizacionHandler.get("menu.salir.cerrar"));
     }
-
 }

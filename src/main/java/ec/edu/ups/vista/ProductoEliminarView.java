@@ -1,3 +1,4 @@
+
 package ec.edu.ups.vista;
 
 import ec.edu.ups.modelo.Producto;
@@ -100,8 +101,6 @@ public class ProductoEliminarView extends JInternalFrame {
         Object [] fila = {producto.getNombre(),producto.getNombre(),producto.getPrecio()};
 
         modelo.addRow(fila);
-
-
 
     }
 }
