@@ -11,7 +11,6 @@ public class ProductoListaView extends JInternalFrame {
     private JTextField txtBuscar;
     private JButton btnBuscar;
     private JTable tblProductos;
-    private JComboBox comboBox1;
     private JPanel panelPrincipal;
     private JButton btnListar;
     private DefaultTableModel modelo;
@@ -91,5 +90,7 @@ public class ProductoListaView extends JInternalFrame {
             };
             modelo.addRow(fila);
         }
+
+
     }
 }

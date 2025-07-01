@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-public class ProductoAniadirView extends JInternalFrame {
+public class ProductoAnadirView extends JInternalFrame {
 
     private JPanel panelPrincipal;
     private JTextField txtPrecio;
@@ -16,7 +16,7 @@ public class ProductoAniadirView extends JInternalFrame {
     private JButton btnAceptar;
     private JButton btnLimpiar;
 
-    public ProductoAniadirView() {
+    public ProductoAnadirView() {
 
         setContentPane(panelPrincipal);
         setTitle("Datos del Producto");
@@ -25,9 +25,8 @@ public class ProductoAniadirView extends JInternalFrame {
         setClosable(true);
         setIconifiable(true);
         setResizable(true);
-        //setResizable(false);
         //setLocationRelativeTo(null);
-        setVisible(false);
+        //setVisible(true);
         //pack();
 
         btnLimpiar.addActionListener(new ActionListener() {
