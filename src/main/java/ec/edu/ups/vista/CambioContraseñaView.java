@@ -2,9 +2,61 @@ package ec.edu.ups.vista;
 
 import javax.swing.*;
 
-public class CambioContraseñaView {
+public class CambioContraseñaView extends JInternalFrame {
+
     private JPanel CambioDeContraseña;
     private JTextField txtActualPassword;
     private JTextField txtNewPassword;
     private JButton btnContraseniaNueva;
+
+    public CambioContraseñaView() {
+        setContentPane(CambioDeContraseña);
+        setTitle("Cambiar Contraseña");
+        setClosable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 300);
+    }
+
+    public JPanel getPanelPrincipal() {
+        return CambioDeContraseña;
+    }
+
+    public JTextField getTxtActualPassword() {
+        return txtActualPassword;
+    }
+
+    public JTextField getTxtNewPassword() {
+        return txtNewPassword;
+    }
+
+    public JButton getBtnActualizar() {
+        return btnContraseniaNueva;
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void setCambioDeContraseña(JPanel cambioDeContraseña) {
+        CambioDeContraseña = cambioDeContraseña;
+    }
+
+    public void setTxtActualPassword(JTextField txtActualPassword) {
+        this.txtActualPassword = txtActualPassword;
+    }
+
+    public void setTxtNewPassword(JTextField txtNewPassword) {
+        this.txtNewPassword = txtNewPassword;
+    }
+
+    public void setBtnContraseniaNueva(JButton btnContraseniaNueva) {
+        this.btnContraseniaNueva = btnContraseniaNueva;
+    }
+
+    public void limpiarCampos() {
+        txtActualPassword.setText("");
+        txtNewPassword.setText("");
+    }
 }

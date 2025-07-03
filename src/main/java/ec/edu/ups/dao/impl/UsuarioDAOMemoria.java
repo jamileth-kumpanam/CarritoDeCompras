@@ -22,6 +22,7 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
     public Usuario autenticar(String username, String contrasenia) {
         for (Usuario usuario : usuarios) {
             if(usuario.getUsername().equals(username) && usuario.getContrasenia().equals(contrasenia)){
+                System.out.println("Usuario autenticado con rol: " + usuario.getRol());
                 return usuario;
             }
         }
@@ -82,5 +83,11 @@ public class UsuarioDAOMemoria implements UsuarioDAO {
         }
 
         return usuariosEncontrados;
+    }
+
+    @Override
+    public void guardar(Usuario nuevoUsuario) {
+        System.out.println("Guardando usuario con rol: " + nuevoUsuario.getRol());
+        usuarios.add(nuevoUsuario);
     }
 }

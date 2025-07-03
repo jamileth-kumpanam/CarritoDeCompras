@@ -25,4 +25,7 @@ public class MensajeInternacionalizacionHandler {
     public Locale getLocale() {
         return locale;
     }
+    public ResourceBundle getBundle() {
+        return bundle;
+    }
 }

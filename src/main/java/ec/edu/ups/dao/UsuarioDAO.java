@@ -21,4 +21,6 @@ public interface UsuarioDAO {
 
     List<Usuario> listarPorRol(Rol rol);
 
+    void guardar(Usuario nuevoUsuario);
+
 }

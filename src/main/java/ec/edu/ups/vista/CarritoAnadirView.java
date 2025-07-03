@@ -34,8 +34,7 @@ public class CarritoAnadirView extends JInternalFrame {
         tblProductos.setModel(modelo);
 
         cargarDatos();
-
-    }
+        }
 
     private void cargarDatos(){
         cbxCantidad.removeAllItems();
@@ -100,7 +99,63 @@ public class CarritoAnadirView extends JInternalFrame {
         return mensajeInternacionalizacion;
     }
 
+    public void setBtnBuscar(JButton btnBuscar) {
+        this.btnBuscar = btnBuscar;
+    }
+
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public void setTxtCodigo(JTextField txtCodigo) {
+        this.txtCodigo = txtCodigo;
+    }
+
+    public void setTxtNombre(JTextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    public void setTxtPrecio(JTextField txtPrecio) {
+        this.txtPrecio = txtPrecio;
+    }
+
+    public void setBtnAnadir(JButton btnAnadir) {
+        this.btnAnadir = btnAnadir;
+    }
+
+    public void setTblProductos(JTable tblProductos) {
+        this.tblProductos = tblProductos;
+    }
+
+    public void setTxtSubtotal(JTextField txtSubtotal) {
+        this.txtSubtotal = txtSubtotal;
+    }
+
+    public void setTxtIva(JTextField txtIva) {
+        this.txtIva = txtIva;
+    }
+
+    public void setTxtTotal(JTextField txtTotal) {
+        this.txtTotal = txtTotal;
+    }
+
+    public void setBtnGuardar(JButton btnGuardar) {
+        this.btnGuardar = btnGuardar;
+    }
+
+    public void setBtnLimpiar(JButton btnLimpiar) {
+        this.btnLimpiar = btnLimpiar;
+    }
+
+    public void setCbxCantidad(JComboBox cbxCantidad) {
+        this.cbxCantidad = cbxCantidad;
+    }
+
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
+    }
+
+    public void setMensajeInternacionalizacion(MensajeInternacionalizacionHandler mensajeInternacionalizacion) {
+        this.mensajeInternacionalizacion = mensajeInternacionalizacion;
     }
 }

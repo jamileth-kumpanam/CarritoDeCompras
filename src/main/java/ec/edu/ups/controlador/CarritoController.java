@@ -9,8 +9,6 @@ import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.vista.CarritoAnadirView;
 
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,7 +17,8 @@ public class CarritoController {
     private final CarritoDAO carritoDAO;
     private final ProductoDAO productoDAO;
     private final CarritoAnadirView carritoAnadirView;
-    private Carrito carrito;
+
+    private Carrito carritoActual;
 
     public CarritoController(CarritoDAO carritoDAO,
                              ProductoDAO productoDAO,
@@ -27,72 +26,106 @@ public class CarritoController {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
         this.carritoAnadirView = carritoAnadirView;
-        this.carrito = new Carrito();
-        configurarEventosEnVistas();
+
+        this.carritoActual = new Carrito();
+        configurarEventos();
     }
 
-    private void configurarEventosEnVistas() {
-        carritoAnadirView.getBtnAnadir().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                anadirProducto();
-            }
-        });
-
-        carritoAnadirView.getBtnGuardar().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                guardarCarrito();
-            }
-        });
+    private void configurarEventos() {
+        carritoAnadirView.getBtnAnadir().addActionListener(e -> anadirProducto());
+        carritoAnadirView.getBtnGuardar().addActionListener(e -> guardarCarrito());
+        carritoAnadirView.getBtnLimpiar().addActionListener(e -> carritoAnadirView.limpiarCampos());
+        carritoAnadirView.getBtnBuscar().addActionListener(e -> buscarProducto());
     }
 
-    private void guardarCarrito() {
-        carritoDAO.crear(carrito);
-        carritoAnadirView.mostrarMensaje("Carrito creado correctamente");
-        System.out.println(carritoDAO.listarTodos());
+    private void buscarProducto() {
+        String codigoStr = carritoAnadirView.getTxtCodigo().getText().trim();
+        if (!codigoStr.matches("\\d+")) {
+            carritoAnadirView.mostrarMensaje("Código inválido.");
+            return;
+        }
+
+        int codigo = Integer.parseInt(codigoStr);
+        Producto producto = productoDAO.buscarPorCodigo(codigo);
+
+        if (producto == null) {
+            carritoAnadirView.mostrarMensaje("Producto no encontrado.");
+            carritoAnadirView.getTxtNombre().setText("");
+            carritoAnadirView.getTxtPrecio().setText("");
+        } else {
+            carritoAnadirView.getTxtNombre().setText(producto.getNombre());
+            carritoAnadirView.getTxtPrecio().setText(String.valueOf(producto.getPrecio()));
+        }
     }
 
     private void anadirProducto() {
+        String codigoStr = carritoAnadirView.getTxtCodigo().getText().trim();
+        if (!codigoStr.matches("\\d+")) {
+            carritoAnadirView.mostrarMensaje("Código inválido.");
+            return;
+        }
 
-        int codigo = Integer.parseInt(carritoAnadirView.getTxtCodigo().getText());
+        int codigo = Integer.parseInt(codigoStr);
         Producto producto = productoDAO.buscarPorCodigo(codigo);
-        int cantidad =  Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
-        carrito.agregarProducto(producto, cantidad);
+
+        if (producto == null) {
+            carritoAnadirView.mostrarMensaje("Producto no encontrado.");
+            return;
+        }
+
+        int cantidad = Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
+        carritoActual.agregarProducto(producto, cantidad);
 
         cargarProductos();
         mostrarTotales();
-
+        carritoAnadirView.limpiarCampos();
     }
 
-    private void cargarProductos(){
+    private void cargarProductos() {
+        DefaultTableModel modelo = carritoAnadirView.getModelo();
+        modelo.setRowCount(0);
+
+        List<ItemCarrito> items = carritoActual.obtenerItems();
         Locale locale = carritoAnadirView.getMensajeInternacionalizacion().getLocale();
 
-        List<ItemCarrito> items = carrito.obtenerItems();
-        DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
-        modelo.setNumRows(0);
         for (ItemCarrito item : items) {
-            modelo.addRow(new Object[]{ item.getProducto().getCodigo(),
+            modelo.addRow(new Object[]{
+                    item.getProducto().getCodigo(),
                     item.getProducto().getNombre(),
                     item.getProducto().getPrecio(),
                     item.getCantidad(),
-                    FormateadorUtils.formatearMoneda(item.getProducto().getPrecio() * item.getCantidad(), locale)
+                    FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
             });
         }
     }
 
-    private void mostrarTotales(){
+    private void mostrarTotales() {
         Locale locale = carritoAnadirView.getMensajeInternacionalizacion().getLocale();
-        String subtotal = FormateadorUtils.formatearMoneda(carrito.calcularSubtotal(), locale);
-        String iva = String.valueOf(carrito.calcularIVA());
-        String total = String.valueOf(carrito.calcularTotal());
 
-        System.out.println(FormateadorUtils.formatearFecha(carrito.getFechaCreacion().getTime(), locale));
+        String subtotal = FormateadorUtils.formatearMoneda(carritoActual.calcularSubtotal(), locale);
+        String iva = FormateadorUtils.formatearMoneda(carritoActual.calcularIVA(), locale);
+        String total = FormateadorUtils.formatearMoneda(carritoActual.calcularTotal(), locale);
 
         carritoAnadirView.getTxtSubtotal().setText(subtotal);
         carritoAnadirView.getTxtIva().setText(iva);
         carritoAnadirView.getTxtTotal().setText(total);
     }
 
+    private void guardarCarrito() {
+        carritoDAO.crear(carritoActual);
+        carritoAnadirView.mostrarMensaje("Carrito guardado correctamente.");
 
+        carritoActual = new Carrito(); // Reiniciar carrito
+        carritoDAO.crear(carritoActual);
+        cargarProductos();
+        mostrarTotales();
+    }
+
+    public Carrito getCarrito() {
+        return carritoActual;
+    }
+
+    public void setCarrito(Carrito carrito) {
+        this.carritoActual = carrito;
+    }
 }

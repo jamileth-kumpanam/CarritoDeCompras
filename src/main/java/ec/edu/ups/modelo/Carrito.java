@@ -12,15 +12,13 @@ public class Carrito {
     private static int contador = 1;
 
     private int codigo;
-
     private GregorianCalendar fechaCreacion;
-
     private List<ItemCarrito> items;
 
     public Carrito() {
-        codigo = contador++;
-        items = new ArrayList<>();
-        fechaCreacion = new GregorianCalendar();
+        this.codigo = contador++;
+        this.fechaCreacion = new GregorianCalendar();
+        this.items = new ArrayList<>();
     }
 
     public int getCodigo() {
@@ -39,6 +37,10 @@ public class Carrito {
         this.fechaCreacion = fechaCreacion;
     }
 
+    public List<ItemCarrito> obtenerItems() {
+        return items;
+    }
+
     public void agregarProducto(Producto producto, int cantidad) {
         items.add(new ItemCarrito(producto, cantidad));
     }
@@ -46,7 +48,8 @@ public class Carrito {
     public void eliminarProducto(int codigoProducto) {
         Iterator<ItemCarrito> it = items.iterator();
         while (it.hasNext()) {
-            if (it.next().getProducto().getCodigo() == codigoProducto) {
+            ItemCarrito item = it.next();
+            if (item.getProducto().getCodigo() == codigoProducto) {
                 it.remove();
                 break;
             }
@@ -57,16 +60,12 @@ public class Carrito {
         items.clear();
     }
 
-    public List<ItemCarrito> obtenerItems() {
-        return items;
-    }
-
     public boolean estaVacio() {
         return items.isEmpty();
     }
 
     public double calcularSubtotal() {
-        double subtotal = 0;
+        double subtotal = 0.0;
         for (ItemCarrito item : items) {
             subtotal += item.getProducto().getPrecio() * item.getCantidad();
         }
@@ -74,8 +73,7 @@ public class Carrito {
     }
 
     public double calcularIVA() {
-        double subtotal = calcularSubtotal();
-        return subtotal * IVA;
+        return calcularSubtotal() * IVA;
     }
 
     public double calcularTotal() {
@@ -87,9 +85,8 @@ public class Carrito {
         return "Carrito{" +
                 "IVA=" + IVA +
                 ", codigo=" + codigo +
-                ", fechaCreacion=" + fechaCreacion +
+                ", fechaCreacion=" + fechaCreacion.getTime() +
                 ", items=" + items +
                 '}';
     }
 }
-
