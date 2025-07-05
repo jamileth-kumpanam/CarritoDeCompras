@@ -1,6 +1,8 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -35,6 +37,9 @@ public class ProductoAnadirView extends JInternalFrame {
                 limpiarCampos();
             }
         });
+    }
+
+    public ProductoAnadirView(ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JPanel getPanelPrincipal() {

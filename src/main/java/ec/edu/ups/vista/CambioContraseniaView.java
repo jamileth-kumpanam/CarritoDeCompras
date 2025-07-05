@@ -1,15 +1,18 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.UsuarioController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
-public class CambioContraseñaView extends JInternalFrame {
+public class CambioContraseniaView extends JInternalFrame {
 
     private JPanel CambioDeContraseña;
     private JTextField txtActualPassword;
     private JTextField txtNewPassword;
     private JButton btnContraseniaNueva;
 
-    public CambioContraseñaView() {
+    public CambioContraseniaView() {
         setContentPane(CambioDeContraseña);
         setTitle("Cambiar Contraseña");
         setClosable(true);
@@ -17,6 +20,9 @@ public class CambioContraseñaView extends JInternalFrame {
         setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
+    }
+
+    public CambioContraseniaView(UsuarioController usuarioController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JPanel getPanelPrincipal() {

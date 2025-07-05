@@ -1,5 +1,8 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
 public class ProductoModificarView extends JInternalFrame{
@@ -19,6 +22,9 @@ public class ProductoModificarView extends JInternalFrame{
         setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
+    }
+
+    public ProductoModificarView(ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JTextField getTxtCodigo() {
@@ -75,5 +81,20 @@ public class ProductoModificarView extends JInternalFrame{
 
     public void setModificarProducto(JPanel modificarProducto) {
         ModificarProducto = modificarProducto;
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    public boolean mostrarMensajePregunta(String mensaje) {
+        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Confirmación", JOptionPane.YES_NO_OPTION);
+        return opcion == JOptionPane.YES_OPTION;
+    }
+
+    public void limpiarCampos() {
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtPrecio.setText("");
     }
 }

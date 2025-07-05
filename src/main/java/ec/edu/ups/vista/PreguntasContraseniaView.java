@@ -1,8 +1,14 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.UsuarioController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
 public class PreguntasContraseniaView extends JInternalFrame {
+
+    private MensajeInternacionalizacionHandler mensajeHandler;
+    private UsuarioController usuarioController;
 
     private JPanel PreguntasDeSeguridad;
     private JTextField txtNomMama;
@@ -25,6 +31,14 @@ public class PreguntasContraseniaView extends JInternalFrame {
         setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(600, 500);
+
+        setContentPane(new JPanel());
+    }
+
+    public PreguntasContraseniaView(UsuarioController usuarioController, MensajeInternacionalizacionHandler mensajeHandler) {
+    }
+
+    public PreguntasContraseniaView(MensajeInternacionalizacionHandler mensajeInternacionalizacionHandler, UsuarioController usuarioController, String registro) {
     }
 
     public JPanel getPreguntasDeSeguridad() {

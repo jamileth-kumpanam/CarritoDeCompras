@@ -1,6 +1,8 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +31,9 @@ public class ProductoListaView extends JInternalFrame {
         Object[] columnas = {"Codigo", "Nombre", "Precio"};
         modelo.setColumnIdentifiers(columnas);
         tblProductos.setModel(modelo);
+    }
+
+    public ProductoListaView(ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JTextField getTxtBuscar() {

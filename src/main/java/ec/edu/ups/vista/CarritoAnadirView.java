@@ -1,11 +1,17 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.CarritoController;
+import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 public class CarritoAnadirView extends JInternalFrame {
+
+    public CarritoAnadirView(){
+
+    }
     private JButton btnBuscar;
     private JTextField txtCodigo;
     private JTextField txtNombre;
@@ -35,6 +41,9 @@ public class CarritoAnadirView extends JInternalFrame {
 
         cargarDatos();
         }
+
+    public CarritoAnadirView(CarritoController carritoController, ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
+    }
 
     private void cargarDatos(){
         cbxCantidad.removeAllItems();
@@ -157,5 +166,12 @@ public class CarritoAnadirView extends JInternalFrame {
 
     public void setMensajeInternacionalizacion(MensajeInternacionalizacionHandler mensajeInternacionalizacion) {
         this.mensajeInternacionalizacion = mensajeInternacionalizacion;
+    }
+
+    public void limpiarCampos() {
+    }
+
+    public DefaultTableModel getModelo() {
+        return null;
     }
 }

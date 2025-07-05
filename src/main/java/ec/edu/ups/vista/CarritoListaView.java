@@ -1,5 +1,8 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.CarritoController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
 public class CarritoListaView extends JInternalFrame {
@@ -15,6 +18,9 @@ public class CarritoListaView extends JInternalFrame {
         setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
+    }
+
+    public CarritoListaView(CarritoController carritoController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JPanel getListaCarroCompras() {

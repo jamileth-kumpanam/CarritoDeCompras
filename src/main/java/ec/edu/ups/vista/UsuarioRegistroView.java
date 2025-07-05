@@ -1,12 +1,15 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.UsuarioController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
 public class UsuarioRegistroView extends JInternalFrame {
 
     private JPanel RegistroUsuario;
     private JTextField txtNombre;
-    private JTextField txtContrasenia;
+    private JPasswordField txtContrasenia;
     private JButton registrarmeButton;
 
     public UsuarioRegistroView() {
@@ -19,6 +22,9 @@ public class UsuarioRegistroView extends JInternalFrame {
         setSize(400, 300);
     }
 
+    public UsuarioRegistroView(UsuarioController usuarioController, MensajeInternacionalizacionHandler mensajeHandler) {
+    }
+
     public JPanel getRegistroUsuario() {
         return RegistroUsuario;
     }
@@ -27,7 +33,7 @@ public class UsuarioRegistroView extends JInternalFrame {
         return txtNombre;
     }
 
-    public JTextField getTxtContrasenia() {
+    public JPasswordField getTxtContrasenia() {
         return txtContrasenia;
     }
 
@@ -36,14 +42,14 @@ public class UsuarioRegistroView extends JInternalFrame {
     }
 
     public void setRegistroUsuario(JPanel registroUsuario) {
-        RegistroUsuario = registroUsuario;
+        this.RegistroUsuario = registroUsuario;
     }
 
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
     }
 
-    public void setTxtContrasenia(JTextField txtContrasenia) {
+    public void setTxtContrasenia(JPasswordField txtContrasenia) {
         this.txtContrasenia = txtContrasenia;
     }
 

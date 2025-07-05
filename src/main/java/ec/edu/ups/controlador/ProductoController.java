@@ -14,6 +14,10 @@ import java.util.List;
 
 public class ProductoController {
 
+    public ProductoController(ProductoDAO productoDAO) {
+        this.productoDAO = productoDAO;
+    }
+
     private ProductoDAO productoDAO;
 
     private ProductoAnadirView productoAnadirView;
@@ -40,32 +44,23 @@ public class ProductoController {
     }
 
     private void configurarEventos() {
-        // Añadir producto
-        productoAnadirView.getBtnGuardar().addActionListener(e -> guardarProducto());
+        productoAnadirView.getBtnLimpiar().addActionListener(e -> guardarProducto());
 
-        // Buscar producto por nombre
         productoListaView.getBtnBuscar().addActionListener(e -> buscarProductoPorNombre());
 
-        // Listar productos
         productoListaView.getBtnListar().addActionListener(e -> listarProductos());
 
-        // Buscar producto para modificar
         productoModificarView.getBtnActualizar().addActionListener(e -> buscarProductoEdicion());
 
-        // Actualizar producto
         productoModificarView.getBtnActualizar().addActionListener(e -> actualizarProducto());
 
-        // Buscar producto para eliminar
         productoEliminarView.getBtnBuscar().addActionListener(e -> buscarProductoEliminar());
 
-        // Eliminar producto
-        productoEliminarView.getBtnEliminar().addActionListener(e -> eliminarProducto());
+        productoEliminarView.getBtnDeleteProducto().addActionListener(e -> eliminarProducto());
 
-        // Buscar desde el carrito
         carritoAnadirView.getBtnBuscar().addActionListener(e -> buscarProductoDesdeCarrito());
     }
 
-    // Crear nuevo producto
     private void guardarProducto() {
         String txtCod = productoAnadirView.getTxtCodigo().getText().trim();
         String nombre = productoAnadirView.getTxtNombre().getText().trim();
@@ -96,7 +91,6 @@ public class ProductoController {
         productoAnadirView.mostrarProductos(productoDAO.listarTodos());
     }
 
-    // Buscar por nombre en vista de lista
     private void buscarProductoPorNombre() {
         String nombre = productoListaView.getTxtBuscar().getText().trim();
         List<Producto> encontrados = productoDAO.buscarPorNombre(nombre);
@@ -108,7 +102,6 @@ public class ProductoController {
         productoListaView.cargarDatos(productos);
     }
 
-    // Buscar producto por código para editar
     private void buscarProductoEdicion() {
         String txtCod = productoModificarView.getTxtCodigo().getText().trim();
 
@@ -133,7 +126,6 @@ public class ProductoController {
         }
     }
 
-    // Actualizar producto
     private void actualizarProducto() {
         String txtCod = productoModificarView.getTxtCodigo().getText().trim();
         String nombre = productoModificarView.getTxtNombre().getText().trim();
@@ -173,7 +165,6 @@ public class ProductoController {
         }
     }
 
-    // Buscar producto en vista de eliminación
     private void buscarProductoEliminar() {
         String txtCod = productoEliminarView.getTxtCodigo().getText().trim();
 
@@ -193,7 +184,6 @@ public class ProductoController {
         }
     }
 
-    // Eliminar producto
     private void eliminarProducto() {
         String txtCod = productoEliminarView.getTxtCodigo().getText().trim();
 
@@ -219,7 +209,6 @@ public class ProductoController {
         }
     }
 
-    // Buscar producto desde la vista del carrito
     private void buscarProductoDesdeCarrito() {
         String codigoStr = carritoAnadirView.getTxtCodigo().getText().trim();
 
@@ -243,7 +232,6 @@ public class ProductoController {
         }
     }
 
-    // Setters adicionales (por si se requiere después)
     public void setProductoAnadirView(ProductoAnadirView view) { this.productoAnadirView = view; }
     public void setProductoListaView(ProductoListaView view) { this.productoListaView = view; }
     public void setProductoModificarView(ProductoModificarView view) { this.productoModificarView = view; }

@@ -1,5 +1,8 @@
 package ec.edu.ups.vista;
 
+import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 
 public class ProductoDeleteView extends JInternalFrame {
@@ -18,6 +21,9 @@ public class ProductoDeleteView extends JInternalFrame {
         setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
+    }
+
+    public ProductoDeleteView(ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
     }
 
     public JPanel getEliminarProductos() {
@@ -66,5 +72,10 @@ public class ProductoDeleteView extends JInternalFrame {
 
     public void limpiarCampos() {
         txtCodigo.setText("");
+    }
+
+    public boolean mostrarMensajePregunta(String mensaje) {
+        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Confirmación", JOptionPane.YES_NO_OPTION);
+        return opcion == JOptionPane.YES_OPTION;
     }
 }

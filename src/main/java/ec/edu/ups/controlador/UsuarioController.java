@@ -2,6 +2,7 @@ package ec.edu.ups.controlador;
 
 import ec.edu.ups.dao.UsuarioDAO;
 import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import ec.edu.ups.vista.LoginView;
 
 import java.awt.event.ActionEvent;
@@ -13,14 +14,16 @@ public class UsuarioController {
     private final UsuarioDAO usuarioDAO;
     private final LoginView loginView;
 
-    public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView) {
+    private final MensajeInternacionalizacionHandler mensajeHandler;
+
+    public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView, MensajeInternacionalizacionHandler mensajeHandler) {
         this.usuarioDAO = usuarioDAO;
         this.loginView = loginView;
-        this.usuario = null;
+        this.mensajeHandler = mensajeHandler;
         configurarEventosEnVistas();
     }
 
-    private void configurarEventosEnVistas(){
+    private void configurarEventosEnVistas() {
         loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -29,19 +32,23 @@ public class UsuarioController {
         });
     }
 
-    private void autenticar(){
+    private void autenticar() {
         String username = loginView.getTxtUsername().getText();
         String contrasenia = loginView.getTxtContrasenia().getText();
 
         usuario = usuarioDAO.autenticar(username, contrasenia);
-        if(usuario == null){
+        if (usuario == null) {
             loginView.mostrarMensaje("Usuario o contraseña incorrectos.");
-        }else{
+        } else {
             loginView.dispose();
         }
     }
 
-    public Usuario getUsuarioAutenticado(){
+    public Usuario getUsuarioAutenticado() {
         return usuario;
+    }
+
+    public MensajeInternacionalizacionHandler getMensajeInternacionalizacionHandler() {
+        return mensajeHandler;
     }
 }

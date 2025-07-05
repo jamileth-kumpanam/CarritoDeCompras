@@ -20,12 +20,12 @@ public class RegistroController{
     }
 
     private void configurarEventos() {
-        registroView.getBtnRegistrarse().addActionListener(e -> registrarUsuario());
+        registroView.getRegistrarmeButton().addActionListener(e -> registrarUsuario());
     }
 
     private void registrarUsuario() {
         String username = registroView.getTxtNombre().getText();
-        String contrasena = new String(registroView.getTxtContraseña().getPassword());
+        String contrasena = new String(registroView.getTxtContrasenia().getPassword());
 
         Usuario nuevoUsuario = new Usuario(username, contrasena, Rol.USUARIO);
 
@@ -33,11 +33,9 @@ public class RegistroController{
         usuarioDAO.guardar(nuevoUsuario);
 
         PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(
-                usuarioController.getMensajeHandler(), usuarioController, "registro"
+                usuarioController.getMensajeInternacionalizacionHandler(), usuarioController, "registro"
         );
         preguntasView.setVisible(true);
         registroView.dispose();
     }
-
-}
 }

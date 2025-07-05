@@ -8,6 +8,7 @@ import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.vista.CarritoAnadirView;
 
+
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Locale;
@@ -19,6 +20,7 @@ public class CarritoController {
     private final CarritoAnadirView carritoAnadirView;
 
     private Carrito carritoActual;
+
 
     public CarritoController(CarritoDAO carritoDAO,
                              ProductoDAO productoDAO,
