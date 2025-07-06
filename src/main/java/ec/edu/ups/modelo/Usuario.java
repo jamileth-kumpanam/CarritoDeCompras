@@ -15,6 +15,11 @@ public class Usuario {
     private String pregunta3;
     private String respuesta3;
 
+    private String nombre;
+    private String fechaNacimiento;
+    private String telefono;
+    private String correo;
+
     public Usuario() {
     }
 
@@ -95,6 +100,39 @@ public class Usuario {
     public void setRespuesta3(String respuesta3) {
         this.respuesta3 = respuesta3;
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(String fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
 
     @Override
     public String toString() {

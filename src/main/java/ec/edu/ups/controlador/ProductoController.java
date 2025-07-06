@@ -26,7 +26,7 @@ public class ProductoController {
     private ProductoDeleteView productoEliminarView;
     private CarritoAnadirView carritoAnadirView;
 
-    public ProductoController(ProductoDAO productoDAO,
+    public ProductoController (ProductoDAO productoDAO,
                               ProductoAnadirView productoAnadirView,
                               ProductoListaView productoListaView,
                               ProductoModificarView productoModificarView,

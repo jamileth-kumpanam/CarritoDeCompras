@@ -8,7 +8,6 @@ import ec.edu.ups.modelo.Producto;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.vista.CarritoAnadirView;
 
-
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Locale;
@@ -20,7 +19,6 @@ public class CarritoController {
     private final CarritoAnadirView carritoAnadirView;
 
     private Carrito carritoActual;
-
 
     public CarritoController(CarritoDAO carritoDAO,
                              ProductoDAO productoDAO,
@@ -75,7 +73,13 @@ public class CarritoController {
             return;
         }
 
-        int cantidad = Integer.parseInt(carritoAnadirView.getCbxCantidad().getSelectedItem().toString());
+        String cantidadStr = carritoAnadirView.getCbxCantidad().getSelectedItem().toString();
+        if (!cantidadStr.matches("\\d+")) {
+            carritoAnadirView.mostrarMensaje("Cantidad inválida.");
+            return;
+        }
+
+        int cantidad = Integer.parseInt(cantidadStr);
         carritoActual.agregarProducto(producto, cantidad);
 
         cargarProductos();
@@ -84,7 +88,7 @@ public class CarritoController {
     }
 
     private void cargarProductos() {
-        DefaultTableModel modelo = carritoAnadirView.getModelo();
+        DefaultTableModel modelo = (DefaultTableModel) carritoAnadirView.getTblProductos().getModel();
         modelo.setRowCount(0);
 
         List<ItemCarrito> items = carritoActual.obtenerItems();
@@ -118,9 +122,9 @@ public class CarritoController {
         carritoAnadirView.mostrarMensaje("Carrito guardado correctamente.");
 
         carritoActual = new Carrito(); // Reiniciar carrito
-        carritoDAO.crear(carritoActual);
         cargarProductos();
         mostrarTotales();
+        carritoAnadirView.limpiarCampos();
     }
 
     public Carrito getCarrito() {

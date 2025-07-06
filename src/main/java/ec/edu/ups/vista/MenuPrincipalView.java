@@ -35,7 +35,7 @@ public class MenuPrincipalView extends JFrame {
         });
         JMenuItem itemRecuperar = new JMenuItem("Recuperar Contraseña");
         itemRecuperar.addActionListener(e -> {
-            PreguntasContraseniaView view = new PreguntasContraseniaView(usuarioController, mensajeHandler);
+            PreguntasContraseniaView view = new PreguntasContraseniaView(mensajeHandler, usuarioController, "recuperacion");
             jDesktopPane.add(view);
             view.setVisible(true);
         });
