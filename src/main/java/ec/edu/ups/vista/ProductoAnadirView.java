@@ -32,8 +32,10 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
         setTitle(mensajeHandler.get("producto.titulo"));
         setContentPane(panelPrincipal);
         setSize(400, 300);
-        setClosable(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setContentPane(panelPrincipal);
+        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 500);
+        setVisible(true);
 
         actualizarTextos(handler.getBundle());
 
@@ -189,4 +191,5 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
     public void setBtnCancelar(JButton btnCancelar) {
         this.btnCancelar = btnCancelar;
     }
+
 }

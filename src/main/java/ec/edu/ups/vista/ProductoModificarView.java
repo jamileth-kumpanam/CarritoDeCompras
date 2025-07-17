@@ -31,9 +31,10 @@ public class ProductoModificarView extends JInternalFrame implements Idioma {
 
         setTitle("Modificar Producto");
         setContentPane(ModificarProducto);
-        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setTitle("Lista de Productos");
         setSize(500, 500);
-        setResizable(true);
+        setClosable(true);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         btnLimpiar.addActionListener((ActionEvent e) -> limpiarCampos());
         btnCancelar.addActionListener((ActionEvent e) -> dispose());

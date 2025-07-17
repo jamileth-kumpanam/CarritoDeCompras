@@ -34,6 +34,7 @@ public class Main {
             usuarioController.setLoginView(loginView);
 
             loginView.setVisible(true);
+
         });
     }
 }
