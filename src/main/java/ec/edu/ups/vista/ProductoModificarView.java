@@ -1,11 +1,15 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
-public class ProductoModificarView extends JInternalFrame{
+public class ProductoModificarView extends JInternalFrame implements Idioma {
+
     private JTextField txtCodigo;
     private JTextField txtNombre;
     private JTextField txtPrecio;
@@ -13,74 +17,72 @@ public class ProductoModificarView extends JInternalFrame{
     private JButton btnLimpiar;
     private JButton btnCancelar;
     private JPanel ModificarProducto;
+    private JButton btnBuscar;
+    private JLabel lblCodigo;
+    private JLabel lblNombre;
+    private JLabel lblPrecio;
 
-    public ProductoModificarView(){
+    private MensajeInternacionalizacionHandler mensajeHandler;
+    private ProductoController productoController;
+
+    public ProductoModificarView(ProductoController controller, MensajeInternacionalizacionHandler handler) {
+        this.productoController = controller;
+        this.mensajeHandler = handler;
+
+        setTitle("Modificar Producto");
         setContentPane(ModificarProducto);
-        setTitle("Registro de Usuario");
-        setClosable(true);
-        setIconifiable(true);
-        setResizable(true);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setSize(500, 500);
+        setResizable(true);
+
+        btnLimpiar.addActionListener((ActionEvent e) -> limpiarCampos());
+        btnCancelar.addActionListener((ActionEvent e) -> dispose());
+
+        actualizarTextos(mensajeHandler.getBundle());
     }
 
-    public ProductoModificarView(ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        setTitle(mensajeHandler.get("producto.modificar.titulo"));
+        lblCodigo.setText(mensajeHandler.get("producto.codigo"));
+        lblNombre.setText(mensajeHandler.get("producto.nombre"));
+        lblPrecio.setText(mensajeHandler.get("producto.precio"));
+        btnActualizar.setText(mensajeHandler.get("boton.actualizar"));
+        btnLimpiar.setText(mensajeHandler.get("boton.limpiar"));
+        btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
+        btnBuscar.setText(mensajeHandler.get("boton.buscar"));
     }
 
     public JTextField getTxtCodigo() {
         return txtCodigo;
     }
 
-    public void setTxtCodigo(JTextField txtCodigo) {
-        this.txtCodigo = txtCodigo;
-    }
-
     public JTextField getTxtNombre() {
         return txtNombre;
-    }
-
-    public void setTxtNombre(JTextField txtNombre) {
-        this.txtNombre = txtNombre;
     }
 
     public JTextField getTxtPrecio() {
         return txtPrecio;
     }
 
-    public void setTxtPrecio(JTextField txtPrecio) {
-        this.txtPrecio = txtPrecio;
-    }
-
     public JButton getBtnActualizar() {
         return btnActualizar;
-    }
-
-    public void setBtnActualizar(JButton btnActualizar) {
-        this.btnActualizar = btnActualizar;
     }
 
     public JButton getBtnLimpiar() {
         return btnLimpiar;
     }
 
-    public void setBtnLimpiar(JButton btnLimpiar) {
-        this.btnLimpiar = btnLimpiar;
-    }
-
     public JButton getBtnCancelar() {
         return btnCancelar;
     }
 
-    public void setBtnCancelar(JButton btnCancelar) {
-        this.btnCancelar = btnCancelar;
+    public JButton getBtnBuscar() {
+        return btnBuscar;
     }
 
     public JPanel getModificarProducto() {
         return ModificarProducto;
-    }
-
-    public void setModificarProducto(JPanel modificarProducto) {
-        ModificarProducto = modificarProducto;
     }
 
     public void mostrarMensaje(String mensaje) {
@@ -96,5 +98,9 @@ public class ProductoModificarView extends JInternalFrame{
         txtCodigo.setText("");
         txtNombre.setText("");
         txtPrecio.setText("");
+    }
+
+    public void setProductoController(ProductoController productoController) {
+        this.productoController = productoController;
     }
 }

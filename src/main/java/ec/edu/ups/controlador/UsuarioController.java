@@ -11,26 +11,29 @@ import java.awt.event.ActionListener;
 
 public class UsuarioController {
 
-
     private Usuario usuario;
-    private final UsuarioDAO usuarioDAO;
-    private final LoginView loginView;
-    private final MensajeInternacionalizacionHandler mensajeHandler;
+    private Usuario usuarioEnProceso;
 
-    public UsuarioController(UsuarioDAO usuarioDAO, LoginView loginView, MensajeInternacionalizacionHandler mensajeHandler) {
+    private final UsuarioDAO usuarioDAO;
+    private MensajeInternacionalizacionHandler mensajeHandler;
+    private LoginView loginView;
+
+    public UsuarioController(UsuarioDAO usuarioDAO, MensajeInternacionalizacionHandler mensajeHandler) {
         this.usuarioDAO = usuarioDAO;
-        this.loginView = loginView;
         this.mensajeHandler = mensajeHandler;
+    }
+
+    public Usuario autenticarYObtenerUsuario(String username, String contrasenia) {
+        return usuarioDAO.autenticar(username, contrasenia);
+    }
+
+    public void setLoginView(LoginView loginView) {
+        this.loginView = loginView;
         configurarEventosEnVistas();
     }
 
     private void configurarEventosEnVistas() {
-        loginView.getBtnIniciarSesion().addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                autenticar();
-            }
-        });
+        loginView.getBtnIniciarSesion().addActionListener(e -> autenticar());
     }
 
     private void autenticar() {
@@ -40,11 +43,30 @@ public class UsuarioController {
         usuario = usuarioDAO.autenticar(username, contrasenia);
         if (usuario == null) {
             JOptionPane.showMessageDialog(loginView,
-                    "Usuario o contraseña incorrectos.",
-                    "Error de autenticación",
+                    mensajeHandler.get("login.error.usuario_contrasenia"),
+                    mensajeHandler.get("login.error.titulo"),
                     JOptionPane.ERROR_MESSAGE);
         } else {
             loginView.dispose();
+        }
+    }
+
+    public UsuarioDAO getUsuarioDAO() {
+        return usuarioDAO;
+    }
+
+    public Usuario getUsuarioEnProceso() {
+        return usuarioEnProceso;
+    }
+
+    public void setPreguntasSeguridadActual(String r1, String r2, String r3, String p1, String p2, String p3) {
+        if (usuario != null) {
+            usuario.setPregunta1(p1);
+            usuario.setPregunta2(p2);
+            usuario.setPregunta3(p3);
+            usuario.setRespuesta1(r1);
+            usuario.setRespuesta2(r2);
+            usuario.setRespuesta3(r3);
         }
     }
 
@@ -67,16 +89,17 @@ public class UsuarioController {
 
     public boolean verificarRespuestas(String respuesta1, String respuesta2, String respuesta3) {
         return usuario != null &&
-                usuario.getRespuesta1().equals(respuesta1) &&
-                usuario.getRespuesta2().equals(respuesta2) &&
-                usuario.getRespuesta3().equals(respuesta3);
+                respuesta1 != null && respuesta2 != null && respuesta3 != null &&
+                respuesta1.equals(usuario.getRespuesta1()) &&
+                respuesta2.equals(usuario.getRespuesta2()) &&
+                respuesta3.equals(usuario.getRespuesta3());
     }
 
     public void registrarUsuario(String nombre, String contrasenia, String nacimiento, String telefono, String correo, String usuarioNombre) {
         if (nombre.isEmpty() || contrasenia.isEmpty() || nacimiento.isEmpty()
                 || telefono.isEmpty() || correo.isEmpty() || usuarioNombre.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                    mensajeHandler.get("registro.campos.requeridos"),  // Puedes usar "¡Todos los campos son obligatorios!" si aún no tienes esto en el .properties
+                    mensajeHandler.get("registro.campos.requeridos"),
                     mensajeHandler.get("ventana.registro.titulo"),
                     JOptionPane.WARNING_MESSAGE);
             return;
@@ -93,8 +116,17 @@ public class UsuarioController {
         usuarioDAO.crear(nuevoUsuario);
 
         JOptionPane.showMessageDialog(null,
-                mensajeHandler.get("registro.exitoso"), // "¡Usuario registrado exitosamente!"
+                mensajeHandler.get("registro.exitoso"),
                 mensajeHandler.get("ventana.registro.titulo"),
                 JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public void setUsuarioEnProceso(Usuario usuarioEnProceso) {
+        this.usuarioEnProceso = usuarioEnProceso;
+    }
+
+    public boolean autenticarUsuario(String usuario, String contrasenia) {
+
+        return false;
     }
 }

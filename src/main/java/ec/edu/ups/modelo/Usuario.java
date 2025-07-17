@@ -29,6 +29,7 @@ public class Usuario {
         this.rol = rol;
     }
 
+
     public String getUsername() {
         return username;
     }
@@ -142,4 +143,9 @@ public class Usuario {
                 ", rol=" + rol +
                 '}';
     }
+
+    public void setUsuario(String usuarioNombre) {
+        this.username = usuarioNombre;
+    }
+
 }

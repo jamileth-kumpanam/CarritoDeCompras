@@ -35,6 +35,16 @@ public class CarritoDAOMemoria implements CarritoDAO {
     }
 
     @Override
+    public void guardar(Carrito carrito) {
+        Carrito existente = buscarPorCodigo(carrito.getCodigo());
+        if (existente != null) {
+            actualizar(carrito);
+        } else {
+            crear(carrito);
+        }
+    }
+
+    @Override
     public List<Carrito> listarTodos() {
         return new ArrayList<>(carritos);
     }

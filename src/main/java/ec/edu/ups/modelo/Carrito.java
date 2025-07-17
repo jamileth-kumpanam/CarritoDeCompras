@@ -8,7 +8,6 @@ import java.util.List;
 public class Carrito {
 
     private final double IVA = 0.12;
-
     private static int contador = 1;
 
     private int codigo;
@@ -37,7 +36,7 @@ public class Carrito {
         this.fechaCreacion = fechaCreacion;
     }
 
-    public List<ItemCarrito> obtenerItems() {
+    public List<ItemCarrito> getItems() {
         return items;
     }
 
@@ -58,6 +57,10 @@ public class Carrito {
 
     public void vaciarCarrito() {
         items.clear();
+    }
+
+    public void setItems(List<ItemCarrito> items) {
+        this.items = items;
     }
 
     public boolean estaVacio() {

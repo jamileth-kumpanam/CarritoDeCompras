@@ -6,109 +6,76 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 public class CarritoListaView extends JInternalFrame implements Idioma {
 
-    private MensajeInternacionalizacionHandler mensajeHandler;
-    private JPanel ListaCarroCompras;
-    private JTable tblListaCarrito;
-    private JButton btnCancelar;
-    private JLabel lblListaCarros;
+    private JPanel panelPrincipal;
+    private JTable tblCarrito;
+    private JButton btnCerrar;
+    private JLabel lblTitulo;
+
     private CarritoController carritoController;
-    private DefaultTableModel modelo;
-
-    public CarritoListaView(MensajeInternacionalizacionHandler mensajeHandler) {
-        this.mensajeHandler = mensajeHandler;
-
-        // Inicializa los componentes manualmente (si usas un GUI builder, ignora o ajusta)
-        ListaCarroCompras = new JPanel(new BorderLayout());
-        lblListaCarros = new JLabel();
-        tblListaCarrito = new JTable();
-        btnCancelar = new JButton();
-
-        // Panel superior con etiqueta
-        JPanel panelSuperior = new JPanel();
-        panelSuperior.add(lblListaCarros);
-        ListaCarroCompras.add(panelSuperior, BorderLayout.NORTH);
-
-        // Tabla en el centro con scroll
-        JScrollPane scrollPane = new JScrollPane(tblListaCarrito);
-        ListaCarroCompras.add(scrollPane, BorderLayout.CENTER);
-
-        // Panel inferior con botón cancelar
-        JPanel panelInferior = new JPanel();
-        panelInferior.add(btnCancelar);
-        ListaCarroCompras.add(panelInferior, BorderLayout.SOUTH);
-
-        // Configura la ventana interna
-        setContentPane(ListaCarroCompras);
-        setTitle("Carritos");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-
-        // Configura tabla
-        modelo = new DefaultTableModel();
-        Object[] columnas = {"ID", "Fecha Creación", "Usuario", "Total"};
-        modelo.setColumnIdentifiers(columnas);
-        tblListaCarrito.setModel(modelo);
-
-        // Carga textos iniciales
-        actualizarTextos(mensajeHandler.getBundle());
-
-        // Icono para el botón cancelar
-        ImageIcon iconCancelar = new ImageIcon(getClass().getResource("/imagenes/cross (1).png"));
-        btnCancelar.setIcon(new ImageIcon(iconCancelar.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
-
-        // Acción botón cancelar
-        btnCancelar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
-        });
-    }
+    private MensajeInternacionalizacionHandler mensajeHandler;
 
     public CarritoListaView(CarritoController carritoController, MensajeInternacionalizacionHandler mensajeHandler) {
-        this(mensajeHandler);
+        super("Lista del Carrito", true, true, false, true);
         this.carritoController = carritoController;
+        this.mensajeHandler = mensajeHandler;
+
+        setContentPane(panelPrincipal);
+        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 400);
+        setVisible(true);
+
+        DefaultTableModel modelo = new DefaultTableModel();
+        Object[] columnas = {"Código", "Nombre", "Precio", "Cantidad", "Subtotal"};
+        modelo.setColumnIdentifiers(columnas);
+        tblCarrito.setModel(modelo);
+
+        actualizarTextos(mensajeHandler.getBundle());
+
+        btnCerrar.addActionListener(e -> dispose());
     }
 
-    // Getters y setters
-
-    public JPanel getListaCarroCompras() {
-        return ListaCarroCompras;
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        lblTitulo.setText(mensajeHandler.get("carrito.lista.titulo"));
+        btnCerrar.setText(mensajeHandler.get("login.cancelar"));
     }
 
-    public void setListaCarroCompras(JPanel listaCarroCompras) {
-        this.ListaCarroCompras = listaCarroCompras;
+    // Getters y Setters
+
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
     }
 
-    public JTable getTblListaCarrito() {
-        return tblListaCarrito;
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
     }
 
-    public void setTblListaCarrito(JTable tblListaCarrito) {
-        this.tblListaCarrito = tblListaCarrito;
+    public JTable getTblCarrito() {
+        return tblCarrito;
     }
 
-    public JButton getBtnCancelar() {
-        return btnCancelar;
+    public void setTblCarrito(JTable tblCarrito) {
+        this.tblCarrito = tblCarrito;
     }
 
-    public void setBtnCancelar(JButton btnCancelar) {
-        this.btnCancelar = btnCancelar;
+    public JButton getBtnCerrar() {
+        return btnCerrar;
     }
 
-    public JLabel getLblListaCarros() {
-        return lblListaCarros;
+    public void setBtnCerrar(JButton btnCerrar) {
+        this.btnCerrar = btnCerrar;
     }
 
-    public void setLblListaCarros(JLabel lblListaCarros) {
-        this.lblListaCarros = lblListaCarros;
+    public JLabel getLblTitulo() {
+        return lblTitulo;
+    }
+
+    public void setLblTitulo(JLabel lblTitulo) {
+        this.lblTitulo = lblTitulo;
     }
 
     public CarritoController getCarritoController() {
@@ -119,28 +86,11 @@ public class CarritoListaView extends JInternalFrame implements Idioma {
         this.carritoController = carritoController;
     }
 
-    public DefaultTableModel getModelo() {
-        return modelo;
+    public MensajeInternacionalizacionHandler getMensajeHandler() {
+        return mensajeHandler;
     }
 
-    public void setModelo(DefaultTableModel modelo) {
-        this.modelo = modelo;
-    }
-
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
-    }
-
-    public int obtenerCodigoCarritoSeleccionado() {
-        int fila = tblListaCarrito.getSelectedRow();
-        if (fila >= 0) {
-            return (int) modelo.getValueAt(fila, 0);
-        }
-        return -1;
-    }
-
-    public void actualizarTextos(ResourceBundle bundle) {
-        lblListaCarros.setText(mensajeHandler.get("titulo"));
-        btnCancelar.setText(mensajeHandler.get("cancelar"));
+    public void setMensajeHandler(MensajeInternacionalizacionHandler mensajeHandler) {
+        this.mensajeHandler = mensajeHandler;
     }
 }

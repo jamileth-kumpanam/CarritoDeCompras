@@ -14,6 +14,8 @@ public interface CarritoDAO {
 
     void eliminar(int codigo);
 
+    void guardar(Carrito carrito);
+
     List<Carrito> listarTodos();
 
 }

@@ -12,8 +12,18 @@ public class MensajeInternacionalizacionHandler {
         this.bundle = ResourceBundle.getBundle("messages", locale);
     }
 
+    public MensajeInternacionalizacionHandler(Locale locale) {
+        this.locale = locale;
+        this.bundle = ResourceBundle.getBundle("messages", locale);
+    }
+
     public String get(String key) {
-        return bundle.getString(key);
+        try {
+            return bundle.getString(key);
+        } catch (Exception e) {
+            System.err.println("Clave no encontrada: " + key);
+            return "!" + key + "!";
+        }
     }
 
     public void setLenguaje(String lenguaje, String pais) {
@@ -21,11 +31,11 @@ public class MensajeInternacionalizacionHandler {
         this.bundle = ResourceBundle.getBundle("messages", locale);
     }
 
-    public ResourceBundle getBundle() {
-        return bundle;
+    public Locale getLocale() {
+        return this.locale;
     }
 
-    public Locale getLocale() {
-        return locale;
+    public ResourceBundle getBundle() {
+        return bundle;
     }
 }

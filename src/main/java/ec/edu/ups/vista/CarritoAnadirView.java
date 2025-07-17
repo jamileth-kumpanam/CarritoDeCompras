@@ -2,22 +2,17 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
-import ec.edu.ups.util.FormateadorUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CarritoAnadirView extends JInternalFrame implements Idioma {
-    public CarritoAnadirView(){}
 
-    // Componentes Swing
     private JButton btnBuscar;
     private JTextField txtCodigo;
     private JTextField txtNombre;
@@ -38,21 +33,21 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
     private JLabel lblPrecio;
     private JLabel lblCantidad;
 
-    // Controladores y handler
     private CarritoController carritoController;
     private ProductoController productoController;
     private MensajeInternacionalizacionHandler mensajeHandler;
 
-    // Constructor principal
-    public CarritoAnadirView(MensajeInternacionalizacionHandler mensajeHandler) {
+    public CarritoAnadirView(CarritoController carritoController, ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
         super("Carrito de Compras", true, true, false, true);
+        this.carritoController = carritoController;
+        this.productoController = productoController;
         this.mensajeHandler = mensajeHandler;
 
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
+        setVisible(true);
 
-        // Configurar tabla con columnas
         DefaultTableModel modelo = new DefaultTableModel();
         Object[] columnas = {"Código", "Nombre", "Precio", "Cantidad", "Subtotal"};
         modelo.setColumnIdentifiers(columnas);
@@ -61,26 +56,18 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
         cargarDatosComboCantidad();
         actualizarTextos(mensajeHandler.getBundle());
 
-        // Cargar iconos con escala y asignar a botones
-        btnBuscar.setIcon(cargarIcono("/imagenes/search.png", 20, 20));
-        btnAnadir.setIcon(cargarIcono("/imagenes/plus.png", 20, 20));
-        btnGuardar.setIcon(cargarIcono("/imagenes/shield-check.png", 20, 20));
-        btnLimpiar.setIcon(cargarIcono("/imagenes/broom.png", 20, 20));
-        cancelarButton.setIcon(cargarIcono("/imagenes/cross (1).png", 20, 20));
-
-        // Listeners
         cancelarButton.addActionListener(e -> dispose());
         btnLimpiar.addActionListener(e -> limpiarCampos());
+
+        configurarEventos();
     }
 
-    // Constructor con controladores
-    public CarritoAnadirView(CarritoController carritoController, ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
-        this(mensajeHandler);
-        this.carritoController = carritoController;
-        this.productoController = productoController;
+    private void configurarEventos() {
+        if (btnAnadir != null) btnAnadir.addActionListener(e -> carritoController.agregarProductoAlCarrito());
+        if (btnBuscar != null) btnBuscar.addActionListener(e -> carritoController.buscarProducto());
+        if (btnGuardar != null) btnGuardar.addActionListener(e -> carritoController.guardarCarrito());
     }
 
-    // Método para cargar datos al combo de cantidad
     private void cargarDatosComboCantidad() {
         if (cbxCantidad != null) {
             cbxCantidad.removeAllItems();
@@ -90,62 +77,45 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
         }
     }
 
-    // Método para limpiar campos y tabla
     public void limpiarCampos() {
-        if (txtCodigo != null) txtCodigo.setText("");
-        if (txtNombre != null) txtNombre.setText("");
-        if (txtPrecio != null) txtPrecio.setText("");
-        if (txtSubtotal != null) txtSubtotal.setText("");
-        if (txtIva != null) txtIva.setText("");
-        if (txtTotal != null) txtTotal.setText("");
-        if (cbxCantidad != null) cbxCantidad.setSelectedIndex(0);
+        txtCodigo.setText("");
+        txtNombre.setText("");
+        txtPrecio.setText("");
+        txtSubtotal.setText("");
+        txtIva.setText("");
+        txtTotal.setText("");
+        cbxCantidad.setSelectedIndex(0);
 
-        if (tblProductos != null) {
-            DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
-            modelo.setRowCount(0); // limpiar filas
-        }
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+        modelo.setRowCount(0);
     }
 
-    // Método para mostrar mensajes al usuario
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
-    // Actualiza textos de etiquetas y botones para internacionalización
+    @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        if (lblCodigo != null) lblCodigo.setText(mensajeHandler.get("login.Codigo"));
-        if (lblNombre != null) lblNombre.setText(mensajeHandler.get("login.Nombre"));
-        if (lblPrecio != null) lblPrecio.setText(mensajeHandler.get("login.Precio"));
-        if (lblCantidad != null) lblCantidad.setText(mensajeHandler.get("login.Cantidad"));
+        lblCodigo.setText(mensajeHandler.get("login.Codigo"));
+        lblNombre.setText(mensajeHandler.get("login.Nombre"));
+        lblPrecio.setText(mensajeHandler.get("login.Precio"));
+        lblCantidad.setText(mensajeHandler.get("login.Cantidad"));
 
-        if (btnBuscar != null) btnBuscar.setText(mensajeHandler.get("login.Buscar"));
-        if (btnAnadir != null) btnAnadir.setText(mensajeHandler.get("login.anadir"));
-        if (btnGuardar != null) btnGuardar.setText(mensajeHandler.get("login.guardar"));
-        if (btnLimpiar != null) btnLimpiar.setText(mensajeHandler.get("login.limpiar"));
-        if (cancelarButton != null) cancelarButton.setText(mensajeHandler.get("login.cancelar"));
+        btnBuscar.setText(mensajeHandler.get("login.Buscar"));
+        btnAnadir.setText(mensajeHandler.get("login.anadir"));
+        btnGuardar.setText(mensajeHandler.get("login.guardar"));
+        btnLimpiar.setText(mensajeHandler.get("login.limpiar"));
+        cancelarButton.setText(mensajeHandler.get("login.cancelar"));
     }
 
-    // Actualiza los totales con formato de moneda según locale
     public void actualizarTotalesFormateados(double subtotal, double iva, double total) {
         Locale locale = mensajeHandler.getLocale();
-        if (txtSubtotal != null) txtSubtotal.setText(FormateadorUtils.formatearMoneda(subtotal, locale));
-        if (txtIva != null) txtIva.setText(FormateadorUtils.formatearMoneda(iva, locale));
-        if (txtTotal != null) txtTotal.setText(FormateadorUtils.formatearMoneda(total, locale));
+        txtSubtotal.setText(FormateadorUtils.formatearMoneda(subtotal, locale));
+        txtIva.setText(FormateadorUtils.formatearMoneda(iva, locale));
+        txtTotal.setText(FormateadorUtils.formatearMoneda(total, locale));
     }
 
-    // Utilidad para cargar y escalar iconos
-    private ImageIcon cargarIcono(String path, int ancho, int alto) {
-        try {
-            ImageIcon icono = new ImageIcon(getClass().getResource(path));
-            Image imgEscalada = icono.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH);
-            return new ImageIcon(imgEscalada);
-        } catch (Exception e) {
-            System.err.println("No se pudo cargar el icono: " + path);
-            return null;
-        }
-    }
-
-    // Getters y setters
+    // Getters y Setters
 
     public JButton getBtnBuscar() { return btnBuscar; }
     public void setBtnBuscar(JButton btnBuscar) { this.btnBuscar = btnBuscar; }
@@ -189,18 +159,9 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
     public JButton getCancelarButton() { return cancelarButton; }
     public void setCancelarButton(JButton cancelarButton) { this.cancelarButton = cancelarButton; }
 
-    public MensajeInternacionalizacionHandler getMensajeHandler() { return mensajeHandler; }
-    public void setMensajeHandler(MensajeInternacionalizacionHandler mensajeHandler) { this.mensajeHandler = mensajeHandler; }
-
     public CarritoController getCarritoController() { return carritoController; }
-    public void setCarritoController(CarritoController carritoController) { this.carritoController = carritoController; }
-
     public ProductoController getProductoController() { return productoController; }
     public void setProductoController(ProductoController productoController) { this.productoController = productoController; }
-
-    private MensajeInternacionalizacionHandler mensajeInternacionalizacion;
-
-    public MensajeInternacionalizacionHandler getMensajeInternacionalizacion() {
-        return mensajeInternacionalizacion;
+    public void setCarritoAnadirView(CarritoAnadirView carritoAnadirView) {
     }
 }

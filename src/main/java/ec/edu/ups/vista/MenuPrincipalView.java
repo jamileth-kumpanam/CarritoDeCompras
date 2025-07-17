@@ -52,7 +52,8 @@ public class MenuPrincipalView extends JFrame {
         JMenu menuProducto = new JMenu("Producto");
         JMenuItem itemAnadir = new JMenuItem("Añadir");
         itemAnadir.addActionListener(e -> {
-            ProductoAnadirView view = new ProductoAnadirView(productoController, mensajeHandler);
+            ProductoAnadirView view = new ProductoAnadirView(mensajeHandler);
+            view.setProductoController(productoController);
             jDesktopPane.add(view);
             view.setVisible(true);
         });
@@ -64,13 +65,15 @@ public class MenuPrincipalView extends JFrame {
         });
         JMenuItem itemEliminar = new JMenuItem("Eliminar");
         itemEliminar.addActionListener(e -> {
-            ProductoDeleteView view = new ProductoDeleteView(productoController, mensajeHandler);
+            ProductoDeleteView view = new ProductoDeleteView(mensajeHandler);
+            view.setProductoController(productoController);
             jDesktopPane.add(view);
             view.setVisible(true);
         });
         JMenuItem itemListar = new JMenuItem("Listar");
         itemListar.addActionListener(e -> {
-            ProductoListaView view = new ProductoListaView(productoController, mensajeHandler);
+            ProductoListaView view = new ProductoListaView(mensajeHandler);
+            view.setProductoController(productoController);
             jDesktopPane.add(view);
             view.setVisible(true);
         });
@@ -98,6 +101,7 @@ public class MenuPrincipalView extends JFrame {
             jDesktopPane.add(view);
             view.setVisible(true);
         });
+
         menuCarrito.add(itemAnadirCarrito);
         menuCarrito.add(itemModificarCarrito);
         menuCarrito.add(itemListarCarrito);

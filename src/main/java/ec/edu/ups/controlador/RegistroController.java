@@ -20,7 +20,7 @@ public class RegistroController{
     }
 
     private void configurarEventos() {
-        registroView.getRegistrarmeButton().addActionListener(e -> registrarUsuario());
+        registroView.getBtnRegistrarme().addActionListener(e -> registrarUsuario());
     }
 
     private void registrarUsuario() {

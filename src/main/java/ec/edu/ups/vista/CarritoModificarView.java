@@ -2,229 +2,240 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
-import ec.edu.ups.modelo.Carrito;
-import ec.edu.ups.modelo.ItemCarrito;
-import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CarritoModificarView extends JInternalFrame implements Idioma {
 
-    private ProductoController productoController;
+    private JPanel panelPrincipal;
+    private JButton buscarButton;
+    private JTextField codigoTextField;
+    private JTextField nombreTextField;
+    private JTextField precioTextField;
+    private JButton modificarButton;
+    private JButton eliminarButton;
+    private JTable productosTable;
+    private JTextField subtotalTextField;
+    private JTextField ivaTextField;
+    private JTextField totalTextField;
+    private JComboBox<String> cantidadComboBox;
+    private JButton cancelarButton;
+    private JButton guardarButton;
+    private JButton limpiarButton;
+    private JLabel codigoLabel;
+    private JLabel nombreLabel;
+    private JLabel precioLabel;
+    private JLabel cantidadLabel;
+    private JLabel lblProducto;
+    private JLabel lblTotal;
+    private JLabel lblIva;
+    private JLabel lblSubtotal;
+    private JLabel lblElegirCarro;
+    private JComboBox cbxElegirCarrito;
+    private JComboBox cbxIngrProducto;
     private CarritoController carritoController;
+    private ProductoController productoController;
     private MensajeInternacionalizacionHandler mensajeHandler;
 
-    private JPanel ModificarCarrito;
-    private JComboBox<Carrito> cbxElegirCarrito;
-    private JTable tblProductos;
-    private JButton btnEliminar;
-    private JComboBox<Integer> cbxSelCantidad;
-    private JTextField txtIngrProducto;
-    private JTextField txtIngrCodProducto;
-    private JComboBox<Carrito> cbxIngrProducto;
-    private JButton btnAgregar;
-    private JButton btnActualizar;
-    private JTextField txtSubtotal;
-    private JTextField txtIva;
-    private JTextField txtTotal;
-    private JButton btnCancelar;
-    private JLabel lblCantidad;
-    private JLabel lblProducto;
-    private JLabel lblCodProducto;
-    private JLabel lblElegirCarro;
-    private JLabel lblSubtotal;
-    private JLabel lblIva;
-    private JLabel lblTotal;
-
-    private DefaultTableModel modelo;
-
-    // Constructor principal GUI
-    public CarritoModificarView(MensajeInternacionalizacionHandler handler) {
-        this.mensajeHandler = handler;
-        setContentPane(ModificarCarrito);
-        setTitle("Modificar Carrito");
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(700, 500);
-
-        // Configurar tabla
-        modelo = new DefaultTableModel();
-        Object[] columnas = {"Código", "Nombre", "Precio", "Cantidad", "Subtotal"};
-        modelo.setColumnIdentifiers(columnas);
-        tblProductos.setModel(modelo);
-
-        // Llenar combo de cantidades
-        cbxSelCantidad.removeAllItems();
-        for (int i = 1; i <= 20; i++) {
-            cbxSelCantidad.addItem(i);
-        }
-
-        // Evento de selección de fila en tabla
-        tblProductos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tblProductos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                int fila = tblProductos.getSelectedRow();
-                if (fila >= 0) {
-                    String valor = tblProductos.getValueAt(fila, 3).toString();
-                    if (valor.matches("\\d+")) {
-                        cbxSelCantidad.setSelectedItem(Integer.parseInt(valor));
-                    }
-                }
-            }
-        });
-
-        // Íconos
-        btnActualizar.setIcon(escalarIcono("/imagenes/check.png"));
-        btnEliminar.setIcon(escalarIcono("/imagenes/cross (1).png"));
-        btnAgregar.setIcon(escalarIcono("/imagenes/plus.png"));
-        btnCancelar.setIcon(escalarIcono("/imagenes/cross (1).png"));
-
-        // Acción de cancelar
-        btnCancelar.addActionListener(e -> dispose());
-    }
-
-    // Constructor con controladores
     public CarritoModificarView(CarritoController carritoController, ProductoController productoController, MensajeInternacionalizacionHandler mensajeHandler) {
-        this(mensajeHandler);
+        super("Modificar Carrito", true, true, false, true);
         this.carritoController = carritoController;
         this.productoController = productoController;
+        this.mensajeHandler = mensajeHandler;
+
+        setContentPane(panelPrincipal);
+        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 500);
+        setVisible(true);
+
+        actualizarTextos(mensajeHandler.getBundle());
+
+        cancelarButton.addActionListener(e -> dispose());
+        limpiarButton.addActionListener(e -> limpiarCampos());
+        configurarEventos();
     }
 
-    // Método para escalar íconos
-    private Icon escalarIcono(String ruta) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(ruta));
-        return new ImageIcon(icon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH));
+    private void configurarEventos() {
+        if (buscarButton != null) buscarButton.addActionListener(e -> carritoController.buscarProducto());
+        if (modificarButton != null) modificarButton.addActionListener(e -> carritoController.modificarProductoEnCarrito());
+        if (eliminarButton != null) eliminarButton.addActionListener(e -> carritoController.eliminarProductoDelCarrito());
+        if (guardarButton != null) guardarButton.addActionListener(e -> carritoController.guardarCarrito());
     }
 
-    // Cargar productos en tabla
-    public void cargarProductosEnTabla() {
-        modelo.setRowCount(0);
-        Locale locale = mensajeHandler.getLocale();
-
-        for (ItemCarrito item : carritoController.getCarrito().obtenerItems()) {
-            modelo.addRow(new Object[]{
-                    item.getProducto().getCodigo(),
-                    item.getProducto().getNombre(),
-                    FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), locale),
-                    item.getCantidad(),
-                    FormateadorUtils.formatearMoneda(item.getSubtotal(), locale)
-            });
-        }
-    }
-
-    // Actualizar totales (subtotal, iva, total)
-    public void actualizarTotales() {
-        double subtotal = 0.0;
-
-        for (ItemCarrito item : carritoController.getCarrito().obtenerItems()) {
-            subtotal += item.getProducto().getPrecio() * item.getCantidad();
-        }
-
-        double iva = subtotal * 0.12;
-        double total = subtotal + iva;
-
-        Locale locale = mensajeHandler.getLocale();
-        txtSubtotal.setText(FormateadorUtils.formatearMoneda(subtotal, locale));
-        txtIva.setText(FormateadorUtils.formatearMoneda(iva, locale));
-        txtTotal.setText(FormateadorUtils.formatearMoneda(total, locale));
-    }
-
-    // Limpiar campos
     public void limpiarCampos() {
-        txtIngrProducto.setText("");
-        txtIngrCodProducto.setText("");
-        cbxSelCantidad.setSelectedIndex(0);
-        cbxIngrProducto.setSelectedIndex(0);
-        txtSubtotal.setText("");
-        txtIva.setText("");
-        txtTotal.setText("");
+        codigoTextField.setText("");
+        nombreTextField.setText("");
+        precioTextField.setText("");
+        subtotalTextField.setText("");
+        ivaTextField.setText("");
+        totalTextField.setText("");
+        cantidadComboBox.setSelectedIndex(0);
     }
 
-    // Mostrar mensaje en ventana
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
-    }
-
-    // Idioma
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        setTitle(bundle.getString("modificar.titulo"));
-        lblCantidad.setText(bundle.getString("cantidad"));
-        lblProducto.setText(bundle.getString("producto"));
-        lblCodProducto.setText(bundle.getString("codigo"));
-        lblElegirCarro.setText(bundle.getString("carrito.elegir"));
-        lblSubtotal.setText(bundle.getString("subtotal"));
-        lblIva.setText(bundle.getString("iva"));
-        lblTotal.setText(bundle.getString("total"));
+        codigoLabel.setText(mensajeHandler.get("login.Codigo"));
+        nombreLabel.setText(mensajeHandler.get("login.Nombre"));
+        precioLabel.setText(mensajeHandler.get("login.Precio"));
+        cantidadLabel.setText(mensajeHandler.get("login.Cantidad"));
 
-        btnAgregar.setText(bundle.getString("agregar"));
-        btnActualizar.setText(bundle.getString("actualizar"));
-        btnEliminar.setText(bundle.getString("eliminar"));
-        btnCancelar.setText(bundle.getString("cancelar"));
+        buscarButton.setText(mensajeHandler.get("login.Buscar"));
+        modificarButton.setText(mensajeHandler.get("login.modificar"));
+        eliminarButton.setText(mensajeHandler.get("login.eliminar"));
+        guardarButton.setText(mensajeHandler.get("login.guardar"));
+        limpiarButton.setText(mensajeHandler.get("login.limpiar"));
+        cancelarButton.setText(mensajeHandler.get("login.cancelar"));
     }
 
-    // Getters necesarios
-    public JPanel getModificarCarrito() {
-        return ModificarCarrito;
-    }
+    // Getters y Setters
 
-    public JComboBox<Carrito> getCbxElegirCarrito() {
-        return cbxElegirCarrito;
+    public JButton getBuscarButton() { return buscarButton; }
+    public JTextField getCodigoTextField() { return codigoTextField; }
+    public JTextField getNombreTextField() { return nombreTextField; }
+    public JTextField getPrecioTextField() { return precioTextField; }
+    public JButton getModificarButton() { return modificarButton; }
+    public JButton getEliminarButton() { return eliminarButton; }
+    public JTable getProductosTable() { return productosTable; }
+    public JTextField getSubtotalTextField() { return subtotalTextField; }
+    public JTextField getIvaTextField() { return ivaTextField; }
+    public JTextField getTotalTextField() { return totalTextField; }
+    public JButton getGuardarButton() { return guardarButton; }
+    public JButton getLimpiarButton() { return limpiarButton; }
+    public JComboBox<String> getCantidadComboBox() { return cantidadComboBox; }
+    public JButton getCancelarButton() { return cancelarButton; }
+    public void setPanelPrincipal(JPanel panelPrincipal) {
+        this.panelPrincipal = panelPrincipal;
     }
-
-    public JTable getTblProductos() {
-        return tblProductos;
+    public void setBuscarButton(JButton buscarButton) {
+        this.buscarButton = buscarButton;
     }
-
-    public JButton getBtnEliminar() {
-        return btnEliminar;
+    public void setCodigoTextField(JTextField codigoTextField) {
+        this.codigoTextField = codigoTextField;
     }
-
-    public JComboBox<Integer> getCbxSelCantidad() {
-        return cbxSelCantidad;
+    public void setNombreTextField(JTextField nombreTextField) {
+        this.nombreTextField = nombreTextField;
     }
-
-    public JTextField getTxtIngrProducto() {
-        return txtIngrProducto;
+    public void setPrecioTextField(JTextField precioTextField) {
+        this.precioTextField = precioTextField;
     }
-
-    public JTextField getTxtIngrCodProducto() {
-        return txtIngrCodProducto;
+    public void setModificarButton(JButton modificarButton) {
+        this.modificarButton = modificarButton;
     }
-
-    public JComboBox<Carrito> getCbxIngrProducto() {
+    public void setEliminarButton(JButton eliminarButton) {
+        this.eliminarButton = eliminarButton;
+    }
+    public void setMensajeHandler(MensajeInternacionalizacionHandler mensajeHandler) {
+        this.mensajeHandler = mensajeHandler;
+    }
+    public void setProductoController(ProductoController productoController) {
+        this.productoController = productoController;
+    }
+    public void setCarritoController(CarritoController carritoController) {
+        this.carritoController = carritoController;
+    }
+    public void setCbxIngrProducto(JComboBox cbxIngrProducto) {
+        this.cbxIngrProducto = cbxIngrProducto;
+    }
+    public void setCbxElegirCarrito(JComboBox cbxElegirCarrito) {
+        this.cbxElegirCarrito = cbxElegirCarrito;
+    }
+    public void setLblElegirCarro(JLabel lblElegirCarro) {
+        this.lblElegirCarro = lblElegirCarro;
+    }
+    public void setLblSubtotal(JLabel lblSubtotal) {
+        this.lblSubtotal = lblSubtotal;
+    }
+    public void setLblIva(JLabel lblIva) {
+        this.lblIva = lblIva;
+    }
+    public void setLblTotal(JLabel lblTotal) {
+        this.lblTotal = lblTotal;
+    }
+    public void setLblProducto(JLabel lblProducto) {
+        this.lblProducto = lblProducto;
+    }
+    public void setCantidadLabel(JLabel cantidadLabel) {
+        this.cantidadLabel = cantidadLabel;
+    }
+    public void setPrecioLabel(JLabel precioLabel) {
+        this.precioLabel = precioLabel;
+    }
+    public void setNombreLabel(JLabel nombreLabel) {
+        this.nombreLabel = nombreLabel;
+    }
+    public void setCodigoLabel(JLabel codigoLabel) {
+        this.codigoLabel = codigoLabel;
+    }
+    public void setLimpiarButton(JButton limpiarButton) {
+        this.limpiarButton = limpiarButton;
+    }
+    public void setGuardarButton(JButton guardarButton) {
+        this.guardarButton = guardarButton;
+    }
+    public void setCancelarButton(JButton cancelarButton) {
+        this.cancelarButton = cancelarButton;
+    }
+    public void setCantidadComboBox(JComboBox<String> cantidadComboBox) {
+        this.cantidadComboBox = cantidadComboBox;
+    }
+    public void setTotalTextField(JTextField totalTextField) {
+        this.totalTextField = totalTextField;
+    }
+    public void setIvaTextField(JTextField ivaTextField) {
+        this.ivaTextField = ivaTextField;
+    }
+    public void setSubtotalTextField(JTextField subtotalTextField) {
+        this.subtotalTextField = subtotalTextField;
+    }
+    public void setProductosTable(JTable productosTable) {
+        this.productosTable = productosTable;
+    }
+    public MensajeInternacionalizacionHandler getMensajeHandler() {
+        return mensajeHandler;
+    }
+    public ProductoController getProductoController() {
+        return productoController;
+    }
+    public CarritoController getCarritoController() {
+        return carritoController;
+    }
+    public JComboBox getCbxIngrProducto() {
         return cbxIngrProducto;
     }
-
-    public JButton getBtnAgregar() {
-        return btnAgregar;
+    public JComboBox getCbxElegirCarrito() {
+        return cbxElegirCarrito;
     }
-
-    public JButton getBtnActualizar() {
-        return btnActualizar;
+    public JLabel getLblElegirCarro() {
+        return lblElegirCarro;
     }
-
-    public JTextField getTxtSubtotal() {
-        return txtSubtotal;
+    public JLabel getLblSubtotal() {
+        return lblSubtotal;
     }
-
-    public JTextField getTxtIva() {
-        return txtIva;
+    public JLabel getLblIva() {
+        return lblIva;
     }
-
-    public JTextField getTxtTotal() {
-        return txtTotal;
+    public JLabel getLblTotal() {
+        return lblTotal;
     }
-
-    public JButton getBtnCancelar() {
-        return btnCancelar;
+    public JLabel getLblProducto() {
+        return lblProducto;
+    }
+    public JLabel getCantidadLabel() {
+        return cantidadLabel;
+    }
+    public JLabel getPrecioLabel() {
+        return precioLabel;
+    }
+    public JLabel getNombreLabel() {
+        return nombreLabel;
+    }
+    public JLabel getCodigoLabel() {
+        return codigoLabel;
+    }
+    public JPanel getPanelPrincipal() {
+        return panelPrincipal;
     }
 }

@@ -1,13 +1,16 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.UsuarioController;
+import ec.edu.ups.modelo.Rol;
+import ec.edu.ups.modelo.Usuario;
+import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
-public class UsuarioRegistroView extends JInternalFrame {
+public class UsuarioRegistroView extends JInternalFrame implements Idioma {
 
     private JPanel RegistroUsuario;
     private JTextField txtNombre;
@@ -17,7 +20,7 @@ public class UsuarioRegistroView extends JInternalFrame {
     private JTextField txtTelefono;
     private JTextField txtCorreo;
     private JTextField txtUsuario;
-    private JPanel Registro;
+    private JComboBox<String> cbxGenero;
     private JLabel lblRegistrarse;
     private JLabel lblNombres;
     private JLabel lblContrasenia;
@@ -25,120 +28,88 @@ public class UsuarioRegistroView extends JInternalFrame {
     private JLabel lblTelefono;
     private JLabel lblCorreo;
     private JLabel lblUsuario;
+    private JLabel lblGenero;
 
-    public UsuarioRegistroView() {
+    private UsuarioController usuarioController;
+    private MensajeInternacionalizacionHandler mensajeHandler;
+
+    public UsuarioRegistroView(UsuarioController usuarioController, MensajeInternacionalizacionHandler handler) {
+        this.mensajeHandler = handler;
+        this.usuarioController = usuarioController;
+
         setContentPane(RegistroUsuario);
-        setTitle("Registro de Usuario");
+        setTitle(mensajeHandler.get("registro.titulo"));
+        setSize(400, 400);
         setClosable(true);
-        setIconifiable(true);
-        setResizable(true);
-        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        btnRegistrarme.addActionListener((ActionEvent e) -> registrarUsuario());
+
+        actualizarTextos(mensajeHandler.getBundle());
     }
 
-    public UsuarioRegistroView(UsuarioController usuarioController, MensajeInternacionalizacionHandler mensajeHandler) {
-        setContentPane(RegistroUsuario);
-        setClosable(true);
-        setIconifiable(true);
-        setResizable(true);
-        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+    private void registrarUsuario() {
+        String nombre = txtNombre.getText().trim();
+        String usuario = txtUsuario.getText().trim();
+        String contrasenia = new String(txtContrasenia.getPassword()).trim();
+        String correo = txtCorreo.getText().trim();
+        String telefono = txtTelefono.getText().trim();
+        String nacimiento = txtNacimiento.getText().trim();
+        String genero = (String) cbxGenero.getSelectedItem();
 
-        setTitle(mensajeHandler.get("ventana.registro.titulo"));
-        lblRegistrarse.setText(mensajeHandler.get("ventana.registro.titulo"));
-        lblNombres.setText(mensajeHandler.get("ventana.registro.nombre"));
-        lblContrasenia.setText(mensajeHandler.get("ventana.registro.contrasenia"));
-        lblNacimiento.setText(mensajeHandler.get("ventana.registro.nacimiento"));
-        lblTelefono.setText(mensajeHandler.get("ventana.registro.telefono"));
-        lblCorreo.setText(mensajeHandler.get("ventana.registro.correo"));
-        lblUsuario.setText(mensajeHandler.get("ventana.registro.usuario"));
-        btnRegistrarme.setText(mensajeHandler.get("ventana.registro.boton"));
+        if (nombre.isEmpty() || usuario.isEmpty() || contrasenia.isEmpty()) {
+            mostrarMensaje("Por favor, llena los campos obligatorios.");
+            return;
+        }
 
+        usuarioController.registrarUsuario(
+                nombre,
+                contrasenia,
+                nacimiento,
+                telefono,
+                correo,
+                usuario
+        );
 
-        btnRegistrarme.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                usuarioController.registrarUsuario(
-                        txtNombre.getText(),
-                        new String(txtContrasenia.getPassword()),
-                        txtNacimiento.getText(),
-                        txtTelefono.getText(),
-                        txtCorreo.getText(),
-                        txtUsuario.getText()
-                );
-            }
-        });
+        mostrarMensaje("Registro exitoso.");
+        limpiarCampos();
+        dispose();
     }
 
-    // Getters
-    public JPanel getRegistroUsuario() {
-        return RegistroUsuario;
+    public void limpiarCampos() {
+        txtNombre.setText("");
+        txtUsuario.setText("");
+        txtContrasenia.setText("");
+        txtCorreo.setText("");
+        txtTelefono.setText("");
+        txtNacimiento.setText("");
+        cbxGenero.setSelectedIndex(0);
+    }
+
+    @Override
+    public void actualizarTextos(ResourceBundle bundle) {
+        setTitle(mensajeHandler.get("registro.titulo"));
+        lblRegistrarse.setText(mensajeHandler.get("registro.titulo"));
+        lblNombres.setText(mensajeHandler.get("registro.nombre"));
+        lblUsuario.setText(mensajeHandler.get("registro.usuario"));
+        lblContrasenia.setText(mensajeHandler.get("registro.contrasena"));
+        lblCorreo.setText(mensajeHandler.get("registro.correo"));
+        lblTelefono.setText(mensajeHandler.get("registro.telefono"));
+        lblNacimiento.setText(mensajeHandler.get("registro.nacimiento"));
+        lblGenero.setText(mensajeHandler.get("registro.genero"));
+        btnRegistrarme.setText(mensajeHandler.get("registro.boton"));
+    }
+
+    public void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
     }
 
     public JTextField getTxtNombre() {
         return txtNombre;
     }
 
-    public JPasswordField getTxtContrasenia() {
-        return txtContrasenia;
-    }
-
-    public JTextField getTxtNacimiento() {
-        return txtNacimiento;
-    }
-
-    public JTextField getTxtTelefono() {
-        return txtTelefono;
-    }
-
-    public JTextField getTxtCorreo() {
-        return txtCorreo;
-    }
-
-    public JTextField getTxtUsuario() {
-        return txtUsuario;
-    }
-
-    public JButton getRegistrarmeButton() {
-        return btnRegistrarme;
-    }
-
-    // Setters
-    public void setRegistroUsuario(JPanel registroUsuario) {
-        this.RegistroUsuario = registroUsuario;
-    }
-
     public void setTxtNombre(JTextField txtNombre) {
         this.txtNombre = txtNombre;
-    }
-
-    public void setTxtContrasenia(JPasswordField txtContrasenia) {
-        this.txtContrasenia = txtContrasenia;
-    }
-
-    public void setTxtNacimiento(JTextField txtNacimiento) {
-        this.txtNacimiento = txtNacimiento;
-    }
-
-    public void setTxtTelefono(JTextField txtTelefono) {
-        this.txtTelefono = txtTelefono;
-    }
-
-    public void setTxtCorreo(JTextField txtCorreo) {
-        this.txtCorreo = txtCorreo;
-    }
-
-    public void setTxtUsuario(JTextField txtUsuario) {
-        this.txtUsuario = txtUsuario;
-    }
-
-    public void setRegistrarmeButton(JButton registrarmeButton) {
-        this.btnRegistrarme = registrarmeButton;
-    }
-
-    // Métodos útiles
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
     }
 
     public JButton getBtnRegistrarme() {
@@ -149,20 +120,13 @@ public class UsuarioRegistroView extends JInternalFrame {
         this.btnRegistrarme = btnRegistrarme;
     }
 
-    public JPanel getRegistro() {
-        return Registro;
+    public JPasswordField getTxtContrasenia() {
+        return txtContrasenia;
     }
 
-    public void setRegistro(JPanel registro) {
-        Registro = registro;
+    public void setTxtContrasenia(JPasswordField txtContrasenia) {
+        this.txtContrasenia = txtContrasenia;
     }
 
-    public void limpiarCampos() {
-        txtNombre.setText("");
-        txtContrasenia.setText("");
-        txtNacimiento.setText("");
-        txtTelefono.setText("");
-        txtCorreo.setText("");
-        txtUsuario.setText("");
-    }
+
 }

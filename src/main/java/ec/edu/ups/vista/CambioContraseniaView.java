@@ -35,7 +35,6 @@ public class CambioContraseniaView extends JInternalFrame implements Idioma {
 
         actualizarTextos(mensajeHandler.getBundle());
 
-        // Acción del botón actualizar
         btnContraseniaNueva.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,7 +51,6 @@ public class CambioContraseniaView extends JInternalFrame implements Idioma {
             }
         });
 
-        // Acción del botón cancelar
         btnCancelar.addActionListener(e -> dispose());
     }
 
@@ -73,7 +71,6 @@ public class CambioContraseniaView extends JInternalFrame implements Idioma {
         txtNewPassword.setText("");
     }
 
-    // Getters útiles
     public JPanel getPanelPrincipal() {
         return CambioDeContraseña;
     }

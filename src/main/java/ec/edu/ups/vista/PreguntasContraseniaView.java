@@ -40,19 +40,18 @@ public class PreguntasContraseniaView extends JInternalFrame implements Idioma {
     private JLabel lblP10;
     private JLabel lblP;
 
-    public PreguntasContraseniaView(MensajeInternacionalizacionHandler mensajeHandler,
-                                    UsuarioController usuarioController,
-                                    String modo) {
-        this.mensajeHandler = mensajeHandler;
+    public PreguntasContraseniaView(MensajeInternacionalizacionHandler handler, UsuarioController usuarioController, String tipo) {
+        this.mensajeHandler = handler;
         this.usuarioController = usuarioController;
-        this.modo = modo;
+        this.modo = tipo;
 
-        setTitle(mensajeHandler.get("preguntas.titulo"));
-        setContentPane(PreguntasDeSeguridad);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(700, 500);
+        setTitle(handler.get("preguntas.titulo"));
+        setSize(600, 500);
         setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
         setResizable(true);
+        setContentPane(PreguntasDeSeguridad);
 
         actualizarTextos(mensajeHandler.getBundle());
 
@@ -65,7 +64,6 @@ public class PreguntasContraseniaView extends JInternalFrame implements Idioma {
     }
 
     private void procesarRespuestas() {
-        // Para ejemplo, usamos solo tres preguntas. Ajusta según tu UI
         String p1 = lblP1.getText();
         String p2 = lblP2.getText();
         String p3 = lblP3.getText();
@@ -85,19 +83,18 @@ public class PreguntasContraseniaView extends JInternalFrame implements Idioma {
 
             JOptionPane.showMessageDialog(this, mensajeHandler.get("preguntas.guardadas"));
 
-            LoginView loginView = new LoginView(mensajeHandler);
-            UsuarioController nuevoUC = new UsuarioController(usuarioController.getUsuarioDAO(), loginView, mensajeHandler);
-            loginView.setUsuarioController(nuevoUC);
+            LoginView loginView = new LoginView(mensajeHandler, usuarioController, null, null);
+            usuarioController.setLoginView(loginView);
             loginView.setVisible(true);
             dispose();
 
         } else if (modo.equals("recuperacion")) {
-            boolean verificado = usuarioController.verificarPreguntas(p1, r1, p2, r2, p3, r3);
+            boolean verificado = usuarioController.verificarRespuestas(r1, r2, r3);
 
             if (verificado) {
                 JOptionPane.showMessageDialog(this, mensajeHandler.get("verificacion.correcta"));
 
-                CambiarContrasenaView cambiarView = new CambiarContrasenaView(usuarioController, mensajeHandler);
+                CambioContraseniaView cambiarView = new CambioContraseniaView(usuarioController, mensajeHandler);
                 cambiarView.setVisible(true);
                 dispose();
             } else {
