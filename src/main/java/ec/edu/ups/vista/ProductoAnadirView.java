@@ -69,13 +69,27 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        lblTitulo.setText(mensajeHandler.get("producto.titulo"));
-        lblCodigo.setText(mensajeHandler.get("producto.codigo"));
-        lblNombre.setText(mensajeHandler.get("producto.nombre"));
-        lblPrecio.setText(mensajeHandler.get("producto.precio"));
-        btnAceptar.setText(mensajeHandler.get("boton.guardar"));
-        btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
-        btnLimpiar.setText(mensajeHandler.get("boton.limpiar"));
+        if (lblTitulo != null) {
+            lblTitulo.setText(mensajeHandler.get("producto.titulo"));
+        }
+        if (lblCodigo != null) {
+            lblCodigo.setText(mensajeHandler.get("producto.codigo"));
+        }
+        if (lblNombre != null) {
+            lblNombre.setText(mensajeHandler.get("producto.nombre"));
+        }
+        if (lblPrecio != null) {
+            lblPrecio.setText(mensajeHandler.get("producto.precio"));
+        }
+        if (btnAceptar != null) {
+            btnAceptar.setText(mensajeHandler.get("boton.guardar"));
+        }
+        if (btnCancelar != null) {
+            btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
+        }
+        if (btnLimpiar != null) {
+            btnLimpiar.setText(mensajeHandler.get("boton.limpiar"));
+        }
     }
 
     public void limpiarCampos() {

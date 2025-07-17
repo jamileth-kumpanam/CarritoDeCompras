@@ -23,10 +23,6 @@ public class UsuarioController {
         this.mensajeHandler = mensajeHandler;
     }
 
-    public Usuario autenticarYObtenerUsuario(String username, String contrasenia) {
-        return usuarioDAO.autenticar(username, contrasenia);
-    }
-
     public void setLoginView(LoginView loginView) {
         this.loginView = loginView;
         configurarEventosEnVistas();
@@ -128,5 +124,14 @@ public class UsuarioController {
     public boolean autenticarUsuario(String usuario, String contrasenia) {
 
         return false;
+    }
+
+    public Usuario autenticarYObtenerUsuario(String usuario, String contrasenia) {
+        Usuario usuarioAutenticado = usuarioDAO.autenticar(usuario, contrasenia);
+        if (usuarioAutenticado != null) {
+            this.usuario = usuarioAutenticado;
+            return usuarioAutenticado;
+        }
+        return null;
     }
 }
