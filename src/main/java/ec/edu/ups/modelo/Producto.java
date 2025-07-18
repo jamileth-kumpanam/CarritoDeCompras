@@ -1,12 +1,13 @@
 package ec.edu.ups.modelo;
 
-public class Producto {
+import java.io.Serializable;
+
+public class Producto implements Serializable {
     private int codigo;
     private String nombre;
     private double precio;
 
-    public Producto() {
-    }
+    public Producto() {}
 
     public Producto(int codigo, String nombre, double precio) {
         this.codigo = codigo;

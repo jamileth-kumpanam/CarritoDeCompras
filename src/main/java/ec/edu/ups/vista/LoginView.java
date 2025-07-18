@@ -8,7 +8,6 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 public class LoginView extends JFrame {
@@ -36,32 +35,6 @@ public class LoginView extends JFrame {
 
         inicializarComponentes();
         configurarEventos(productoController, carritoController);
-        btnRegistrarse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        btnOlvidoContrasenia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        btnRegistrarse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
-                registroView.setVisible(true);
-            }
-        });
-        btnOlvidoContrasenia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
-                preguntasView.setVisible(true);
-            }
-        });
     }
 
     private void inicializarComponentes() {
@@ -114,11 +87,17 @@ public class LoginView extends JFrame {
         }
 
         if (btnRegistrarse != null) {
-            btnRegistrarse.addActionListener(e -> mostrarMensaje("Funcionalidad de registro no implementada"));
+            btnRegistrarse.addActionListener(e -> {
+                UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
+                registroView.setVisible(true);
+            });
         }
 
         if (btnOlvidoContrasenia != null) {
-            btnOlvidoContrasenia.addActionListener(e -> mostrarMensaje("Funcionalidad de recuperación no implementada"));
+            btnOlvidoContrasenia.addActionListener(e -> {
+                PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
+                preguntasView.setVisible(true);
+            });
         }
     }
 

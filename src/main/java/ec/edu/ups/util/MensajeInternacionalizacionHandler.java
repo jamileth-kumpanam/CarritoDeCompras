@@ -38,4 +38,5 @@ public class MensajeInternacionalizacionHandler {
     public ResourceBundle getBundle() {
         return bundle;
     }
+
 }

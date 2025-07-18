@@ -9,6 +9,7 @@ import ec.edu.ups.vista.ProductoListaView;
 import ec.edu.ups.vista.ProductoModificarView;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class ProductoController {
@@ -27,7 +28,7 @@ public class ProductoController {
 
     public void setProductoAnadirView(ProductoAnadirView view) {
         this.productoAnadirView = view;
-        this.productoAnadirView.getBtnLimpiar().addActionListener(e -> limpiarCamposAnadir());
+        this.productoAnadirView.getBtnCancelar().addActionListener(e -> limpiarCamposAnadir());
         this.productoAnadirView.getBtnAceptar().addActionListener(e -> guardarProducto());
     }
 
@@ -277,5 +278,16 @@ public class ProductoController {
 
     public List<Producto> obtenerTodos() {
         return productoDAO.listarTodos();
+    }
+
+    public void buscarProductoEliminar(int codigo, JTable tabla) {
+        Producto producto = productoDAO.buscarPorCodigo(codigo);
+        if (producto != null) {
+            DefaultTableModel modelo = (DefaultTableModel) tabla.getModel();
+            modelo.setRowCount(0); // Limpiar la tabla
+            modelo.addRow(new Object[]{producto.getCodigo(), producto.getNombre(), producto.getPrecio()});
+        } else {
+            JOptionPane.showMessageDialog(null, "Producto no encontrado.");
+        }
     }
 }

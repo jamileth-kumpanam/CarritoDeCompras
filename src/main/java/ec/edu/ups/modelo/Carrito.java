@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.io.Serializable;
 
-public class Carrito {
-
+public class Carrito implements Serializable {
     private final double IVA = 0.12;
     private static int contador = 1;
-
     private int codigo;
     private GregorianCalendar fechaCreacion;
     private List<ItemCarrito> items;

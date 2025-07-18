@@ -5,8 +5,7 @@ import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableModel;
 import java.util.ResourceBundle;
 
 public class ProductoDeleteView extends JInternalFrame implements Idioma {
@@ -18,7 +17,6 @@ public class ProductoDeleteView extends JInternalFrame implements Idioma {
     private JButton btnDeleteProducto;
     private JButton btnCancelar;
     private JLabel lblCodigo;
-    private JLabel lblTitulo;
 
     private MensajeInternacionalizacionHandler mensajeHandler;
     private ProductoController productoController;
@@ -28,86 +26,78 @@ public class ProductoDeleteView extends JInternalFrame implements Idioma {
 
         setTitle(mensajeHandler.get("producto.eliminar.titulo"));
         setContentPane(EliminarProductos);
-        setSize(500, 500);
-        setClosable(true);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocation(100, 100);
+        setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
+        setSize(500, 400);
+        setVisible(true);
 
         actualizarTextos(handler.getBundle());
 
         btnCancelar.addActionListener(e -> dispose());
 
-        btnDeleteProducto.addActionListener((ActionEvent e) -> {
+        btnBuscar.addActionListener(e -> {
             String codigo = txtCodigo.getText().trim();
-            if (codigo.isEmpty()) {
-                mostrarMensaje(mensajeHandler.get("producto.codigo.vacio"));
+            if (!codigo.matches("\\d+")) {
+                mostrarMensaje(mensajeHandler.get("producto.datos.invalidos"));
                 return;
             }
-
-            boolean confirmado = mostrarMensajePregunta(mensajeHandler.get("producto.confirmar.eliminar"));
-            if (confirmado) {
-                boolean eliminado = productoController.eliminarProductoPorCodigo(codigo);
-                if (eliminado) {
-                    mostrarMensaje(mensajeHandler.get("producto.eliminado.exito"));
-                    limpiarCampos();
-                } else {
-                    mostrarMensaje(mensajeHandler.get("producto.no.encontrado"));
-                }
+            if (productoController != null) {
+                productoController.buscarProductoEliminar(Integer.parseInt(codigo), tblDelete);
+            } else {
+                mostrarMensaje("Controlador de productos no asignado.");
             }
         });
 
-        btnBuscar.addActionListener(e -> {
+        btnDeleteProducto.addActionListener(e -> {
+            int fila = tblDelete.getSelectedRow();
+            if (fila == -1) {
+                mostrarMensaje(mensajeHandler.get("producto.seleccione.fila"));
+                return;
+            }
+            int codigo = Integer.parseInt(tblDelete.getValueAt(fila, 0).toString());
+            if (productoController != null) {
+                mostrarMensaje(mensajeHandler.get("producto.eliminado.exito"));
+                txtCodigo.setText("");
+                DefaultTableModel modelo = (DefaultTableModel) tblDelete.getModel();
+                modelo.setRowCount(0);
+            } else {
+                mostrarMensaje("Controlador de productos no asignado.");
+            }
         });
     }
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        lblTitulo.setText(mensajeHandler.get("producto.eliminar.titulo"));
-        lblCodigo.setText(mensajeHandler.get("producto.codigo"));
-        btnBuscar.setText(mensajeHandler.get("boton.buscar"));
-        btnDeleteProducto.setText(mensajeHandler.get("boton.eliminar"));
-        btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
+        setTitle(mensajeHandler.get("producto.eliminar.titulo"));
+        if (lblCodigo != null) {
+            lblCodigo.setText(mensajeHandler.get("producto.codigo"));
+        }
+        if (btnBuscar != null) {
+            btnBuscar.setText(mensajeHandler.get("boton.buscar"));
+        }
+        if (btnDeleteProducto != null) {
+            btnDeleteProducto.setText(mensajeHandler.get("producto.eliminar.boton"));
+        }
+        if (btnCancelar != null) {
+            btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
+        }
     }
 
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
-    public boolean mostrarMensajePregunta(String mensaje) {
-        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Confirmación", JOptionPane.YES_NO_OPTION);
-        return opcion == JOptionPane.YES_OPTION;
-    }
-
-    public void limpiarCampos() {
-        txtCodigo.setText("");
-    }
-
-    public void setProductoController(ProductoController productoController) {
-        this.productoController = productoController;
-    }
+    // Getters y Setters
 
     public JTextField getTxtCodigo() {
         return txtCodigo;
     }
 
-    public JButton getBtnBuscar() {
-        return btnBuscar;
-    }
-
-    public JButton getBtnDeleteProducto() {
-        return btnDeleteProducto;
-    }
-
-    public JPanel getEliminarProductos() {
-        return EliminarProductos;
-    }
-
-    public void setEliminarProductos(JPanel eliminarProductos) {
-        EliminarProductos = eliminarProductos;
-    }
-
     public void setTxtCodigo(JTextField txtCodigo) {
         this.txtCodigo = txtCodigo;
+    }
+
+    public JButton getBtnBuscar() {
+        return btnBuscar;
     }
 
     public void setBtnBuscar(JButton btnBuscar) {
@@ -118,12 +108,16 @@ public class ProductoDeleteView extends JInternalFrame implements Idioma {
         return tblDelete;
     }
 
-    public void setBtnDeleteProducto(JButton btnDeleteProducto) {
-        this.btnDeleteProducto = btnDeleteProducto;
-    }
-
     public void setTblDelete(JTable tblDelete) {
         this.tblDelete = tblDelete;
+    }
+
+    public JButton getBtnDeleteProducto() {
+        return btnDeleteProducto;
+    }
+
+    public void setBtnDeleteProducto(JButton btnDeleteProducto) {
+        this.btnDeleteProducto = btnDeleteProducto;
     }
 
     public JButton getBtnCancelar() {
@@ -134,11 +128,38 @@ public class ProductoDeleteView extends JInternalFrame implements Idioma {
         this.btnCancelar = btnCancelar;
     }
 
-    public JLabel getLblTitulo() {
-        return lblTitulo;
+    public JLabel getLblCodigo() {
+        return lblCodigo;
     }
 
-    public void setLblTitulo(JLabel lblTitulo) {
-        this.lblTitulo = lblTitulo;
+    public void setLblCodigo(JLabel lblCodigo) {
+        this.lblCodigo = lblCodigo;
+    }
+
+    public void setProductoController(ProductoController productoController) {
+        this.productoController = productoController;
+    }
+
+    public ProductoController getProductoController() {
+        return productoController;
+    }
+
+    public MensajeInternacionalizacionHandler getMensajeHandler() {
+        return mensajeHandler;
+    }
+
+    public void setMensajeHandler(MensajeInternacionalizacionHandler mensajeHandler) {
+        this.mensajeHandler = mensajeHandler;
+    }
+
+    public void limpiarCampos() {
+        txtCodigo.setText("");
+        DefaultTableModel modelo = (DefaultTableModel) tblDelete.getModel();
+        modelo.setRowCount(0);
+    }
+
+    public boolean mostrarMensajePregunta(String mensaje) {
+        int opcion = JOptionPane.showConfirmDialog(this, mensaje, "Confirmar", JOptionPane.YES_NO_OPTION);
+        return opcion == JOptionPane.YES_OPTION;
     }
 }

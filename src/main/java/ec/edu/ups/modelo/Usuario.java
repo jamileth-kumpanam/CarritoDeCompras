@@ -1,27 +1,15 @@
 package ec.edu.ups.modelo;
 
-public class Usuario {
+import java.io.Serializable;
 
+public class Usuario implements Serializable {
     private String username;
     private String contrasenia;
     private Rol rol;
+    private String pregunta1, respuesta1, pregunta2, respuesta2, pregunta3, respuesta3;
+    private String nombre, fechaNacimiento, telefono, correo;
 
-    private String pregunta1;
-    private String respuesta1;
-
-    private String pregunta2;
-    private String respuesta2;
-
-    private String pregunta3;
-    private String respuesta3;
-
-    private String nombre;
-    private String fechaNacimiento;
-    private String telefono;
-    private String correo;
-
-    public Usuario() {
-    }
+    public Usuario() {}
 
     public Usuario(String username, String contrasenia, Rol rol) {
         this.username = username;
