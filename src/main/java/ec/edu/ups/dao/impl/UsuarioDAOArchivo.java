@@ -8,10 +8,10 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDAOBinario implements UsuarioDAO {
+public class UsuarioDAOArchivo implements UsuarioDAO {
     private final String archivo;
 
-    public UsuarioDAOBinario(String archivo) {
+    public UsuarioDAOArchivo(String archivo) {
         this.archivo = archivo;
     }
 
@@ -27,9 +27,12 @@ public class UsuarioDAOBinario implements UsuarioDAO {
 
     @Override
     public void crear(Usuario usuario) {
-        List<Usuario> usuarios = listar();
-        usuarios.add(usuario);
-        guardarUsuarios(usuarios);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))) {
+            writer.write(usuario.getCodigo() + ";" + usuario.getNombre() + ";" + usuario.getUsername() + ";" + usuario.getContrasenia());
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -42,6 +45,11 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         return null;
     }
 
+    @Override
+    public void eliminar(String username) {
+
+    }
+
     public Usuario buscarPorId(int id) {
         for (Usuario usuario : listar()) {
             if (usuario.getCodigo() == id) {
@@ -52,11 +60,16 @@ public class UsuarioDAOBinario implements UsuarioDAO {
     }
 
     public List<Usuario> listar() {
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            return (List<Usuario>) ois.readObject();
-        } catch (Exception e) {
-            return new ArrayList<>();
+        List<Usuario> usuarios = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                usuarios.add(Usuario.desdeString(linea));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        return usuarios;
     }
 
     @Override
@@ -68,20 +81,27 @@ public class UsuarioDAOBinario implements UsuarioDAO {
                 break;
             }
         }
-        guardarUsuarios(usuarios);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+            for (Usuario u : usuarios) {
+                writer.write(u.getCodigo() + ";" + u.getNombre() + ";" + u.getUsername() + ";" + u.getContrasenia());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void eliminar(int id) {
         List<Usuario> usuarios = listar();
         usuarios.removeIf(u -> u.getCodigo() == id);
-        guardarUsuarios(usuarios);
-    }
-
-    @Override
-    public void eliminar(String username) {
-        List<Usuario> usuarios = listar();
-        usuarios.removeIf(u -> u.getUsername().equals(username));
-        guardarUsuarios(usuarios);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+            for (Usuario u : usuarios) {
+                writer.write(u.getCodigo() + ";" + u.getNombre() + ";" + u.getUsername() + ";" + u.getContrasenia());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -93,7 +113,7 @@ public class UsuarioDAOBinario implements UsuarioDAO {
     public List<Usuario> listarPorRol(Rol rol) {
         List<Usuario> usuariosPorRol = new ArrayList<>();
         for (Usuario usuario : listar()) {
-            if (usuario.getRol() != null && usuario.getRol().equals(rol)) {
+            if (usuario.getRol().equals(rol)) {
                 usuariosPorRol.add(usuario);
             }
         }
@@ -103,13 +123,5 @@ public class UsuarioDAOBinario implements UsuarioDAO {
     @Override
     public void guardar(Usuario nuevoUsuario) {
         crear(nuevoUsuario);
-    }
-
-    private void guardarUsuarios(List<Usuario> usuarios) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-            oos.writeObject(usuarios);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

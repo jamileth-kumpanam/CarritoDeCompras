@@ -33,72 +33,62 @@ public class LoginView extends JFrame {
         this.mensajeHandler = handler;
         this.usuarioController = usuarioController;
 
+        setContentPane(panelPrincipal);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+
         inicializarComponentes();
         configurarEventos(productoController, carritoController);
     }
 
     private void inicializarComponentes() {
-        setTitle(mensajeHandler.get("login.titulo"));
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-        setContentPane(panelPrincipal);
-
-        if (cbxIdioma != null) {
-            cbxIdioma.removeAllItems();
-            cbxIdioma.addItem("Español");
-            cbxIdioma.addItem("English");
-            cbxIdioma.addItem("Français");
-        }
+        // Configura el combo de idiomas según tus necesidades
+        cbxIdioma.removeAllItems();
+        cbxIdioma.addItem("Español");
+        cbxIdioma.addItem("English");
+        cbxIdioma.addItem("Français");
 
         actualizarTextos();
     }
 
     private void configurarEventos(ProductoController productoController, CarritoController carritoController) {
-        if (cbxIdioma != null) {
-            cbxIdioma.addActionListener(this::cambiarIdioma);
-        }
+        cbxIdioma.addActionListener(this::cambiarIdioma);
 
-        if (btnIniciarSesion != null) {
-            btnIniciarSesion.addActionListener(e -> {
-                String usuario = txtUsername.getText();
-                String contrasenia = new String(txtContrasenia.getPassword());
+        btnIniciarSesion.addActionListener(e -> {
+            String usuario = txtUsername.getText();
+            String contrasenia = new String(txtContrasenia.getPassword());
 
-                if (usuario.isEmpty() || contrasenia.isEmpty()) {
-                    mostrarMensaje(mensajeHandler.get("login.campos_vacios"));
-                    return;
-                }
+            if (usuario.isEmpty() || contrasenia.isEmpty()) {
+                mostrarMensaje(mensajeHandler.get("login.campos_vacios"));
+                return;
+            }
 
-                Usuario usuarioAutenticado = usuarioController.autenticarYObtenerUsuario(usuario, contrasenia);
+            Usuario usuarioAutenticado = usuarioController.autenticarYObtenerUsuario(usuario, contrasenia);
 
-                if (usuarioAutenticado != null) {
-                    MenuPrincipalView menu = new MenuPrincipalView(
-                            usuarioController,
-                            productoController,
-                            carritoController,
-                            mensajeHandler
-                    );
-                    menu.setVisible(true);
-                    dispose();
-                } else {
-                    mostrarMensaje(mensajeHandler.get("login.error.usuario_contrasenia"));
-                }
-            });
-        }
+            if (usuarioAutenticado != null) {
+                MenuPrincipalView menu = new MenuPrincipalView(
+                        usuarioController,
+                        productoController,
+                        carritoController,
+                        mensajeHandler
+                );
+                menu.setVisible(true);
+                dispose();
+            } else {
+                mostrarMensaje(mensajeHandler.get("login.error.usuario_contrasenia"));
+            }
+        });
 
-        if (btnRegistrarse != null) {
-            btnRegistrarse.addActionListener(e -> {
-                UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
-                registroView.setVisible(true);
-            });
-        }
+        btnRegistrarse.addActionListener(e -> {
+            UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
+            registroView.setVisible(true);
+        });
 
-        if (btnOlvidoContrasenia != null) {
-            btnOlvidoContrasenia.addActionListener(e -> {
-                PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
-                preguntasView.setVisible(true);
-            });
-        }
+        btnOlvidoContrasenia.addActionListener(e -> {
+            PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
+            preguntasView.setVisible(true);
+        });
     }
 
     private void cambiarIdioma(ActionEvent e) {
@@ -130,7 +120,7 @@ public class LoginView extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
-    // Getters y Setters
+    // Getters y Setters...
 
     public JPasswordField getTxtContrasenia() {
         return txtContrasenia;

@@ -82,6 +82,19 @@ public class Carrito implements Serializable {
         return calcularSubtotal() + calcularIVA();
     }
 
+    public static Carrito desdeString(String linea) {
+        String[] partes = linea.split(";");
+        int codigo = Integer.parseInt(partes[0]);
+        long fechaMillis = Long.parseLong(partes[1]);
+        Carrito carrito = new Carrito();
+        carrito.setCodigo(codigo);
+        java.util.GregorianCalendar fecha = new java.util.GregorianCalendar();
+        fecha.setTimeInMillis(fechaMillis);
+        carrito.setFechaCreacion(fecha);
+        // No se cargan los items aquí
+        return carrito;
+    }
+
     @Override
     public String toString() {
         return "Carrito{" +

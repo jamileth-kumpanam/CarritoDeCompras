@@ -3,6 +3,7 @@ package ec.edu.ups.modelo;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
+    private int codigo;
     private String username;
     private String contrasenia;
     private Rol rol;
@@ -10,6 +11,13 @@ public class Usuario implements Serializable {
     private String nombre, fechaNacimiento, telefono, correo;
 
     public Usuario() {}
+
+    public Usuario(int codigo, String nombre, String username, String contrasenia) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.username = username;
+        this.contrasenia = contrasenia;
+    }
 
     public Usuario(String username, String contrasenia, Rol rol) {
         this.username = username;
@@ -122,6 +130,18 @@ public class Usuario implements Serializable {
         this.correo = correo;
     }
 
+    public static Usuario desdeString(String linea) {
+        String[] partes = linea.split(";");
+        int id = Integer.parseInt(partes[0]);
+        String nombre = partes[1];
+        String username = partes[2];
+        String contrasenia = partes[3];
+        return new Usuario(id, nombre, username, contrasenia);
+    }
+
+    public int getCodigo() {
+        return codigo;
+    }
 
     @Override
     public String toString() {

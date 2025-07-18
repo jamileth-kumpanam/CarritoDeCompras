@@ -15,6 +15,14 @@ public class Producto implements Serializable {
         this.precio = precio;
     }
 
+    public static Producto desdeString(String linea) {
+        String[] partes = linea.split(";");
+        int codigo = Integer.parseInt(partes[0]);
+        String nombre = partes[1];
+        double precio = Double.parseDouble(partes[2]);
+        return new Producto(codigo, nombre, precio);
+    }
+
     public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
