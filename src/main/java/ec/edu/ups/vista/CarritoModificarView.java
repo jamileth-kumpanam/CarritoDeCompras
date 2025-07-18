@@ -2,6 +2,9 @@ package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
+
+import ec.edu.ups.controlador.CarritoController;
+import ec.edu.ups.controlador.ProductoController;
 import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
@@ -46,6 +49,8 @@ public class CarritoModificarView extends JInternalFrame implements Idioma {
         this.productoController = productoController;
         this.mensajeHandler = mensajeHandler;
 
+        // Se asume que los componentes se inicializan correctamente por el diseñador o manualmente antes de usarlos
+
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
@@ -53,44 +58,42 @@ public class CarritoModificarView extends JInternalFrame implements Idioma {
 
         actualizarTextos(mensajeHandler.getBundle());
 
-        cancelarButton.addActionListener(e -> dispose());
-        limpiarButton.addActionListener(e -> limpiarCampos());
+        if (cancelarButton != null) cancelarButton.addActionListener(e -> dispose());
+        if (limpiarButton != null) limpiarButton.addActionListener(e -> limpiarCampos());
         configurarEventos();
     }
 
     private void configurarEventos() {
-        if (buscarButton != null) buscarButton.addActionListener(e -> carritoController.buscarProducto());
-        if (modificarButton != null) modificarButton.addActionListener(e -> carritoController.modificarProductoEnCarrito());
-        if (eliminarButton != null) eliminarButton.addActionListener(e -> carritoController.eliminarProductoDelCarrito());
-        if (guardarButton != null) guardarButton.addActionListener(e -> carritoController.guardarCarrito());
+        if (buscarButton != null && carritoController != null) buscarButton.addActionListener(e -> carritoController.buscarProducto());
+        if (modificarButton != null && carritoController != null) modificarButton.addActionListener(e -> carritoController.modificarProductoEnCarrito());
+        if (eliminarButton != null && carritoController != null) eliminarButton.addActionListener(e -> carritoController.eliminarProductoDelCarrito());
+        if (guardarButton != null && carritoController != null) guardarButton.addActionListener(e -> carritoController.guardarCarrito());
     }
 
     public void limpiarCampos() {
-        codigoTextField.setText("");
-        nombreTextField.setText("");
-        precioTextField.setText("");
-        subtotalTextField.setText("");
-        ivaTextField.setText("");
-        totalTextField.setText("");
-        cantidadComboBox.setSelectedIndex(0);
+        if (codigoTextField != null) codigoTextField.setText("");
+        if (nombreTextField != null) nombreTextField.setText("");
+        if (precioTextField != null) precioTextField.setText("");
+        if (subtotalTextField != null) subtotalTextField.setText("");
+        if (ivaTextField != null) ivaTextField.setText("");
+        if (totalTextField != null) totalTextField.setText("");
+        if (cantidadComboBox != null && cantidadComboBox.getItemCount() > 0) cantidadComboBox.setSelectedIndex(0);
     }
 
     @Override
     public void actualizarTextos(ResourceBundle bundle) {
-        codigoLabel.setText(mensajeHandler.get("login.Codigo"));
-        nombreLabel.setText(mensajeHandler.get("login.Nombre"));
-        precioLabel.setText(mensajeHandler.get("login.Precio"));
-        cantidadLabel.setText(mensajeHandler.get("login.Cantidad"));
+        if (codigoLabel != null) codigoLabel.setText(mensajeHandler.get("login.Codigo"));
+        if (nombreLabel != null) nombreLabel.setText(mensajeHandler.get("login.Nombre"));
+        if (precioLabel != null) precioLabel.setText(mensajeHandler.get("login.Precio"));
+        if (cantidadLabel != null) cantidadLabel.setText(mensajeHandler.get("login.Cantidad"));
 
-        buscarButton.setText(mensajeHandler.get("login.Buscar"));
-        modificarButton.setText(mensajeHandler.get("login.modificar"));
-        eliminarButton.setText(mensajeHandler.get("login.eliminar"));
-        guardarButton.setText(mensajeHandler.get("login.guardar"));
-        limpiarButton.setText(mensajeHandler.get("login.limpiar"));
-        cancelarButton.setText(mensajeHandler.get("login.cancelar"));
+        if (buscarButton != null) buscarButton.setText(mensajeHandler.get("login.Buscar"));
+        if (modificarButton != null) modificarButton.setText(mensajeHandler.get("login.modificar"));
+        if (eliminarButton != null) eliminarButton.setText(mensajeHandler.get("login.eliminar"));
+        if (guardarButton != null) guardarButton.setText(mensajeHandler.get("login.guardar"));
+        if (limpiarButton != null) limpiarButton.setText(mensajeHandler.get("login.limpiar"));
+        if (cancelarButton != null) cancelarButton.setText(mensajeHandler.get("login.cancelar"));
     }
-
-    // Getters y Setters
 
     public JButton getBuscarButton() { return buscarButton; }
     public JTextField getCodigoTextField() { return codigoTextField; }

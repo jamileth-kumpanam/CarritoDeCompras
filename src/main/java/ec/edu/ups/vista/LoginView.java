@@ -8,7 +8,6 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Objects;
 
 public class LoginView extends JFrame {
@@ -34,92 +33,62 @@ public class LoginView extends JFrame {
         this.mensajeHandler = handler;
         this.usuarioController = usuarioController;
 
-        inicializarComponentes();
-        configurarEventos(productoController, carritoController);
-        btnRegistrarse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        btnOlvidoContrasenia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
-        });
-        btnRegistrarse.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
-                registroView.setVisible(true);
-            }
-        });
-        btnOlvidoContrasenia.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
-                preguntasView.setVisible(true);
-            }
-        });
-    }
-
-    private void inicializarComponentes() {
-        setTitle(mensajeHandler.get("login.titulo"));
+        setContentPane(panelPrincipal);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(600, 400);
         setLocationRelativeTo(null);
-        setContentPane(panelPrincipal);
 
-        if (cbxIdioma != null) {
-            cbxIdioma.removeAllItems();
-            cbxIdioma.addItem("Español");
-            cbxIdioma.addItem("English");
-            cbxIdioma.addItem("Français");
-        }
+        inicializarComponentes();
+        configurarEventos(productoController, carritoController);
+    }
+
+    private void inicializarComponentes() {
+        // Configura el combo de idiomas según tus necesidades
+        cbxIdioma.removeAllItems();
+        cbxIdioma.addItem("Español");
+        cbxIdioma.addItem("English");
+        cbxIdioma.addItem("Français");
 
         actualizarTextos();
     }
 
     private void configurarEventos(ProductoController productoController, CarritoController carritoController) {
-        if (cbxIdioma != null) {
-            cbxIdioma.addActionListener(this::cambiarIdioma);
-        }
+        cbxIdioma.addActionListener(this::cambiarIdioma);
 
-        if (btnIniciarSesion != null) {
-            btnIniciarSesion.addActionListener(e -> {
-                String usuario = txtUsername.getText();
-                String contrasenia = new String(txtContrasenia.getPassword());
+        btnIniciarSesion.addActionListener(e -> {
+            String usuario = txtUsername.getText();
+            String contrasenia = new String(txtContrasenia.getPassword());
 
-                if (usuario.isEmpty() || contrasenia.isEmpty()) {
-                    mostrarMensaje(mensajeHandler.get("login.campos_vacios"));
-                    return;
-                }
+            if (usuario.isEmpty() || contrasenia.isEmpty()) {
+                mostrarMensaje(mensajeHandler.get("login.campos_vacios"));
+                return;
+            }
 
-                Usuario usuarioAutenticado = usuarioController.autenticarYObtenerUsuario(usuario, contrasenia);
+            Usuario usuarioAutenticado = usuarioController.autenticarYObtenerUsuario(usuario, contrasenia);
 
-                if (usuarioAutenticado != null) {
-                    MenuPrincipalView menu = new MenuPrincipalView(
-                            usuarioController,
-                            productoController,
-                            carritoController,
-                            mensajeHandler
-                    );
-                    menu.setVisible(true);
-                    dispose();
-                } else {
-                    mostrarMensaje(mensajeHandler.get("login.error.usuario_contrasenia"));
-                }
-            });
-        }
+            if (usuarioAutenticado != null) {
+                MenuPrincipalView menu = new MenuPrincipalView(
+                        usuarioController,
+                        productoController,
+                        carritoController,
+                        mensajeHandler
+                );
+                menu.setVisible(true);
+                dispose();
+            } else {
+                mostrarMensaje(mensajeHandler.get("login.error.usuario_contrasenia"));
+            }
+        });
 
-        if (btnRegistrarse != null) {
-            btnRegistrarse.addActionListener(e -> mostrarMensaje("Funcionalidad de registro no implementada"));
-        }
+        btnRegistrarse.addActionListener(e -> {
+            UsuarioRegistroView registroView = new UsuarioRegistroView(usuarioController, mensajeHandler);
+            registroView.setVisible(true);
+        });
 
-        if (btnOlvidoContrasenia != null) {
-            btnOlvidoContrasenia.addActionListener(e -> mostrarMensaje("Funcionalidad de recuperación no implementada"));
-        }
+        btnOlvidoContrasenia.addActionListener(e -> {
+            PreguntasContraseniaView preguntasView = new PreguntasContraseniaView(mensajeHandler, usuarioController, "olvido");
+            preguntasView.setVisible(true);
+        });
     }
 
     private void cambiarIdioma(ActionEvent e) {
@@ -151,7 +120,7 @@ public class LoginView extends JFrame {
         JOptionPane.showMessageDialog(this, mensaje);
     }
 
-    // Getters y Setters
+    // Getters y Setters...
 
     public JPasswordField getTxtContrasenia() {
         return txtContrasenia;

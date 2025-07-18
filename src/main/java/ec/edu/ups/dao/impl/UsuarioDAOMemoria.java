@@ -3,17 +3,14 @@ package ec.edu.ups.dao.impl;
 import ec.edu.ups.dao.UsuarioDAO;
 import ec.edu.ups.modelo.Rol;
 import ec.edu.ups.modelo.Usuario;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class UsuarioDAOMemoria implements UsuarioDAO {
-
-    private List<Usuario> usuarios;
+    private List<Usuario> usuarios = new ArrayList<>();
 
     public UsuarioDAOMemoria() {
-        usuarios = new ArrayList<Usuario>();
         crear(new Usuario("admin", "12345", Rol.ADMINISTRADOR));
         crear(new Usuario("user", "12345", Rol.USUARIO));
     }

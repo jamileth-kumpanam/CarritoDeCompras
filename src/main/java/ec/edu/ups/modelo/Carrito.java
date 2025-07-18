@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
+import java.io.Serializable;
 
-public class Carrito {
-
+public class Carrito implements Serializable {
     private final double IVA = 0.12;
     private static int contador = 1;
-
     private int codigo;
     private GregorianCalendar fechaCreacion;
     private List<ItemCarrito> items;
@@ -81,6 +80,19 @@ public class Carrito {
 
     public double calcularTotal() {
         return calcularSubtotal() + calcularIVA();
+    }
+
+    public static Carrito desdeString(String linea) {
+        String[] partes = linea.split(";");
+        int codigo = Integer.parseInt(partes[0]);
+        long fechaMillis = Long.parseLong(partes[1]);
+        Carrito carrito = new Carrito();
+        carrito.setCodigo(codigo);
+        java.util.GregorianCalendar fecha = new java.util.GregorianCalendar();
+        fecha.setTimeInMillis(fechaMillis);
+        carrito.setFechaCreacion(fecha);
+        // No se cargan los items aquí
+        return carrito;
     }
 
     @Override

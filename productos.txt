@@ -1,0 +1,2 @@
+1;caramelos;2.5
+123;Caramelos;2.5

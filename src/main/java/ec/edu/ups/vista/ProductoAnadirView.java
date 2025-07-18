@@ -6,7 +6,6 @@ import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 public class ProductoAnadirView extends JInternalFrame implements Idioma {
@@ -16,7 +15,6 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
     private JTextField txtNombre;
     private JTextField txtCodigo;
     private JButton btnAceptar;
-    private JButton btnLimpiar;
     private JButton btnCancelar;
     private JLabel lblPrecio;
     private JLabel lblNombre;
@@ -31,15 +29,13 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
 
         setTitle(mensajeHandler.get("producto.titulo"));
         setContentPane(panelPrincipal);
-        setSize(400, 300);
-        setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);
         setVisible(true);
 
         actualizarTextos(handler.getBundle());
 
-        btnLimpiar.addActionListener((ActionEvent e) -> limpiarCampos());
+        btnCancelar.addActionListener(e -> dispose());
 
         btnAceptar.addActionListener(e -> {
             String codigo = txtCodigo.getText().trim();
@@ -63,8 +59,6 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
                 mostrarMensaje("Controlador de productos no asignado.");
             }
         });
-
-        btnCancelar.addActionListener(e -> dispose());
     }
 
     @Override
@@ -87,9 +81,6 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
         if (btnCancelar != null) {
             btnCancelar.setText(mensajeHandler.get("boton.cancelar"));
         }
-        if (btnLimpiar != null) {
-            btnLimpiar.setText(mensajeHandler.get("boton.limpiar"));
-        }
     }
 
     public void limpiarCampos() {
@@ -101,6 +92,8 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
     public void mostrarMensaje(String mensaje) {
         JOptionPane.showMessageDialog(this, mensaje);
     }
+
+    // Getters y Setters...
 
     public void setProductoController(ProductoController productoController) {
         this.productoController = productoController;
@@ -144,14 +137,6 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
 
     public void setTxtPrecio(JTextField txtPrecio) {
         this.txtPrecio = txtPrecio;
-    }
-
-    public JButton getBtnLimpiar() {
-        return btnLimpiar;
-    }
-
-    public void setBtnLimpiar(JButton btnLimpiar) {
-        this.btnLimpiar = btnLimpiar;
     }
 
     public JButton getBtnCancelar() {
@@ -205,5 +190,4 @@ public class ProductoAnadirView extends JInternalFrame implements Idioma {
     public void setBtnCancelar(JButton btnCancelar) {
         this.btnCancelar = btnCancelar;
     }
-
 }

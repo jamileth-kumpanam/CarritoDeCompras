@@ -1,21 +1,24 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.UsuarioController;
-import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
-public class PreguntasContraseniaView extends JInternalFrame implements Idioma {
-
-    private MensajeInternacionalizacionHandler mensajeHandler;
-    private UsuarioController usuarioController;
-    private String modo;
+public class PreguntasContraseniaView extends JInternalFrame {
 
     private JPanel PreguntasDeSeguridad;
+    private JLabel lblP;
+    private JLabel lblP1;
+    private JLabel lblP2;
+    private JLabel lblP3;
+    private JLabel lblP4;
+    private JLabel lblP5;
+    private JLabel lblP6;
+    private JLabel lblP7;
+    private JLabel lblP8;
+    private JLabel lblP9;
+    private JLabel lblP10;
     private JTextField txtNomMama;
     private JTextField txtNomMascota;
     private JTextField txtCiudadNacimiento;
@@ -28,98 +31,36 @@ public class PreguntasContraseniaView extends JInternalFrame implements Idioma {
     private JTextField txtComidaFav;
     private JButton btnGuardarDatos;
 
-    private JLabel lblP1;
-    private JLabel lblP2;
-    private JLabel lblP3;
-    private JLabel lblP4;
-    private JLabel lblP5;
-    private JLabel lblP6;
-    private JLabel lblP7;
-    private JLabel lblP8;
-    private JLabel lblP9;
-    private JLabel lblP10;
-    private JLabel lblP;
-
-    public PreguntasContraseniaView(MensajeInternacionalizacionHandler handler, UsuarioController usuarioController, String tipo) {
-        this.mensajeHandler = handler;
-        this.usuarioController = usuarioController;
-        this.modo = tipo;
-
-        setTitle(handler.get("preguntas.titulo"));
-        setSize(600, 500);
+    public PreguntasContraseniaView(MensajeInternacionalizacionHandler mensajeHandler, UsuarioController usuarioController, String titulo) {
+        setTitle(mensajeHandler.get("preguntas.titulo"));
         setClosable(true);
-        setMaximizable(true);
-        setIconifiable(true);
-        setResizable(true);
         setContentPane(PreguntasDeSeguridad);
+        setSize(500, 550);
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        actualizarTextos(mensajeHandler.getBundle());
+        btnGuardarDatos.addActionListener(e -> {
+            String username = JOptionPane.showInputDialog(this, "Ingrese su usuario:");
+            String nuevaContrasenia = JOptionPane.showInputDialog(this, "Ingrese la nueva contraseña:");
 
-        btnGuardarDatos.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                procesarRespuestas();
+            String respuesta1 = txtNomMama.getText();
+            String respuesta2 = txtNomMascota.getText();
+            String respuesta3 = txtCiudadNacimiento.getText();
+
+            boolean exito = usuarioController.recuperarContrasenia(username, respuesta1, respuesta2, respuesta3, nuevaContrasenia);
+            if (exito) {
+                JOptionPane.showMessageDialog(this, "Contraseña actualizada correctamente.");
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Respuestas incorrectas o usuario no encontrado.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
     }
 
-    private void procesarRespuestas() {
-        String p1 = lblP1.getText();
-        String p2 = lblP2.getText();
-        String p3 = lblP3.getText();
-
-        String r1 = txtNomMama.getText().trim();
-        String r2 = txtNomMascota.getText().trim();
-        String r3 = txtCiudadNacimiento.getText().trim();
-
-        if (r1.isEmpty() || r2.isEmpty() || r3.isEmpty()) {
-            JOptionPane.showMessageDialog(this, mensajeHandler.get("preguntas.error.faltan"));
-            return;
-        }
-
-        if (modo.equals("registro")) {
-            usuarioController.setPreguntasSeguridadActual(r1, r2, r3, p1, p2, p3);
-            usuarioController.getUsuarioDAO().guardar(usuarioController.getUsuarioEnProceso());
-
-            JOptionPane.showMessageDialog(this, mensajeHandler.get("preguntas.guardadas"));
-
-            LoginView loginView = new LoginView(mensajeHandler, usuarioController, null, null);
-            usuarioController.setLoginView(loginView);
-            loginView.setVisible(true);
-            dispose();
-
-        } else if (modo.equals("recuperacion")) {
-            boolean verificado = usuarioController.verificarRespuestas(r1, r2, r3);
-
-            if (verificado) {
-                JOptionPane.showMessageDialog(this, mensajeHandler.get("verificacion.correcta"));
-
-                CambioContraseniaView cambiarView = new CambioContraseniaView(usuarioController, mensajeHandler);
-                cambiarView.setVisible(true);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, mensajeHandler.get("verificacion.incorrecta"));
-            }
-        }
+    public JButton getBtnGuardarDatos() {
+        return btnGuardarDatos;
     }
 
-    @Override
-    public void actualizarTextos(ResourceBundle bundle) {
-        lblP1.setText(mensajeHandler.get("pregunta1"));
-        lblP2.setText(mensajeHandler.get("pregunta2"));
-        lblP3.setText(mensajeHandler.get("pregunta3"));
-        lblP4.setText(mensajeHandler.get("pregunta4"));
-        lblP5.setText(mensajeHandler.get("pregunta5"));
-        lblP6.setText(mensajeHandler.get("pregunta6"));
-        lblP7.setText(mensajeHandler.get("pregunta7"));
-        lblP8.setText(mensajeHandler.get("pregunta8"));
-        lblP9.setText(mensajeHandler.get("pregunta9"));
-        lblP10.setText(mensajeHandler.get("pregunta10"));
-        lblP.setText(mensajeHandler.get("preguntas.titulo"));
-        btnGuardarDatos.setText(mensajeHandler.get("boton.guardar"));
-    }
-
-    public void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje);
+    public void setBtnGuardarDatos(JButton btnGuardarDatos) {
+        this.btnGuardarDatos = btnGuardarDatos;
     }
 }

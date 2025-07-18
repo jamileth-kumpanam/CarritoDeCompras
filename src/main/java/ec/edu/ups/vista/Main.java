@@ -1,14 +1,9 @@
 package ec.edu.ups.vista;
-import ec.edu.ups.controlador.CarritoController;
-import ec.edu.ups.controlador.ProductoController;
-import ec.edu.ups.controlador.UsuarioController;
-import ec.edu.ups.dao.CarritoDAO;
-import ec.edu.ups.dao.ProductoDAO;
-import ec.edu.ups.dao.UsuarioDAO;
-import ec.edu.ups.dao.impl.CarritoDAOMemoria;
-import ec.edu.ups.dao.impl.ProductoDAOMemoria;
-import ec.edu.ups.dao.impl.UsuarioDAOMemoria;
+
+import ec.edu.ups.controlador.*;
+import ec.edu.ups.dao.*;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+
 import javax.swing.*;
 import java.util.Locale;
 
@@ -18,26 +13,32 @@ public class Main {
             Locale locale = new Locale("es", "EC");
             MensajeInternacionalizacionHandler mensajeHandler = new MensajeInternacionalizacionHandler(locale);
 
-            UsuarioDAO usuarioDAO = new UsuarioDAOMemoria();
-            ProductoDAO productoDAO = new ProductoDAOMemoria();
-            CarritoDAO carritoDAO = new CarritoDAOMemoria();
+            String[] opciones = {"Memoria", "Archivo", "Binario"};
+            String tipoAlmacenamiento = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione el tipo de almacenamiento:",
+                    "Configuración",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    opciones,
+                    opciones[0]
+            );
+
+            if (tipoAlmacenamiento == null) {
+                JOptionPane.showMessageDialog(null, "Debe seleccionar un tipo de almacenamiento.");
+                System.exit(0);
+            }
+
+            UsuarioDAO usuarioDAO = DAOFactory.crearUsuarioDAO(tipoAlmacenamiento);
+            ProductoDAO productoDAO = DAOFactory.crearProductoDAO(tipoAlmacenamiento);
+            CarritoDAO carritoDAO = DAOFactory.crearCarritoDAO(tipoAlmacenamiento);
 
             UsuarioController usuarioController = new UsuarioController(usuarioDAO, mensajeHandler);
             ProductoController productoController = new ProductoController(productoDAO);
-
             CarritoController carritoController = new CarritoController(carritoDAO, productoDAO, null, mensajeHandler);
 
-            CarritoAnadirView carritoAnadirView = new CarritoAnadirView(carritoController, productoController, mensajeHandler);
-            carritoController.setCarritoAnadirView(carritoAnadirView);
-
             LoginView loginView = new LoginView(mensajeHandler, usuarioController, productoController, carritoController);
-            usuarioController.setLoginView(loginView);
-
             loginView.setVisible(true);
-
-            usuarioController.setLoginView(loginView);
-            loginView.setVisible(true);
-
         });
     }
 }

@@ -1,11 +1,10 @@
 package ec.edu.ups.modelo;
 
-public class ItemCarrito {
+import java.io.Serializable;
+
+public class ItemCarrito implements Serializable {
     private Producto producto;
     private int cantidad;
-
-    public ItemCarrito() {
-    }
 
     public ItemCarrito(Producto producto, int cantidad) {
         this.producto = producto;
