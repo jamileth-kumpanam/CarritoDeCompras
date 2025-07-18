@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDAOArchivo implements ProductoDAO {
-    private final String archivo;
+    private final File archivo;
 
-    public ProductoDAOArchivo(String archivo) {
-        this.archivo = archivo;
+    public ProductoDAOArchivo(String nombreArchivo) {
+        File carpeta = new File("data");
+        if (!carpeta.exists()) carpeta.mkdirs();
+        this.archivo = new File(carpeta, nombreArchivo);
     }
 
     @Override
@@ -26,27 +28,23 @@ public class ProductoDAOArchivo implements ProductoDAO {
 
     @Override
     public Producto buscarPorCodigo(int codigo) {
+        for (Producto p : listar()) {
+            if (p.getCodigo() == codigo) return p;
+        }
         return null;
     }
 
     @Override
     public List<Producto> buscarPorNombre(String nombre) {
-        return List.of();
+        List<Producto> encontrados = new ArrayList<>();
+        for (Producto p : listar()) {
+            if (p.getNombre().equalsIgnoreCase(nombre)) encontrados.add(p);
+        }
+        return encontrados;
     }
 
     public Producto buscarPorId(String id) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-            String linea;
-            while ((linea = reader.readLine()) != null) {
-                Producto producto = Producto.desdeString(linea);
-                if (String.valueOf(producto.getCodigo()).equals(id)) {
-                    return producto;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return buscarPorCodigo(Integer.parseInt(id));
     }
 
     public List<Producto> listar() {
@@ -57,14 +55,13 @@ public class ProductoDAOArchivo implements ProductoDAO {
                 productos.add(Producto.desdeString(linea));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            // Si el archivo no existe, retorna lista vacía
         }
         return productos;
     }
 
     @Override
     public void actualizar(Producto producto) {
-
         List<Producto> productos = listar();
         for (int i = 0; i < productos.size(); i++) {
             if (productos.get(i).getCodigo() == producto.getCodigo()) {
@@ -72,30 +69,26 @@ public class ProductoDAOArchivo implements ProductoDAO {
                 break;
             }
         }
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
-            for (Producto p : productos) {
-                writer.write(p.getCodigo() + ";" + p.getNombre() + ";" + p.getPrecio());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        guardarProductos(productos);
     }
 
     @Override
     public void eliminar(int codigo) {
+        List<Producto> productos = listar();
+        productos.removeIf(p -> p.getCodigo() == codigo);
+        guardarProductos(productos);
+    }
 
+    public void eliminar(String id) {
+        eliminar(Integer.parseInt(id));
     }
 
     @Override
     public List<Producto> listarTodos() {
-        return List.of();
+        return listar();
     }
 
-    public void eliminar(String id) {
-
-        List<Producto> productos = listar();
-        productos.removeIf(p -> String.valueOf(p.getCodigo()).equals(id));
+    private void guardarProductos(List<Producto> productos) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
             for (Producto p : productos) {
                 writer.write(p.getCodigo() + ";" + p.getNombre() + ";" + p.getPrecio());

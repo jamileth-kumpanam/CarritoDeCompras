@@ -49,8 +49,6 @@ public class CarritoModificarView extends JInternalFrame implements Idioma {
         this.productoController = productoController;
         this.mensajeHandler = mensajeHandler;
 
-        // Se asume que los componentes se inicializan correctamente por el diseñador o manualmente antes de usarlos
-
         setContentPane(panelPrincipal);
         setDefaultCloseOperation(JInternalFrame.DISPOSE_ON_CLOSE);
         setSize(500, 500);

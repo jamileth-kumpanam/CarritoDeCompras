@@ -3,10 +3,12 @@ package ec.edu.ups.vista;
 import ec.edu.ups.controlador.UsuarioController;
 import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.util.Validaciones;
+import ec.edu.ups.util.excepciones.CedulaInvalidaException;
+import ec.edu.ups.util.excepciones.PasswordInvalidaException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 public class CambioContraseniaView extends JInternalFrame implements Idioma {
@@ -35,19 +37,23 @@ public class CambioContraseniaView extends JInternalFrame implements Idioma {
 
         actualizarTextos(mensajeHandler.getBundle());
 
-        btnContraseniaNueva.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String actual = txtActualPassword.getText();
-                String nueva = txtNewPassword.getText();
+        btnContraseniaNueva.addActionListener((ActionEvent e) -> {
+            String cedula = txtActualPassword.getText().trim();
+            String nueva = txtNewPassword.getText().trim();
 
-                boolean actualizada = usuarioController.cambiarContrasenia(actual, nueva);
+            try {
+                Validaciones.validarCedula(cedula);
+                Validaciones.validarPassword(nueva);
+
+                boolean actualizada = usuarioController.cambiarContrasenia(cedula, nueva);
                 if (actualizada) {
                     mostrarMensaje(mensajeHandler.get("cambioContrasena.exito"));
                     limpiarCampos();
                 } else {
                     mostrarMensaje(mensajeHandler.get("cambioContrasena.error"));
                 }
+            } catch (CedulaInvalidaException | PasswordInvalidaException ex) {
+                mostrarMensaje(ex.getMessage());
             }
         });
 

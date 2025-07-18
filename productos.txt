@@ -1,2 +1,7 @@
 1;caramelos;2.5
 123;Caramelos;2.5
+1001;caramelos;2.5
+1002;clavos;0.1
+1003;cable;3.0
+1004;snack;1.5
+1005;agua;0.5

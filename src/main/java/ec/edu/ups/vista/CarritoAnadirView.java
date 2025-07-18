@@ -1,13 +1,17 @@
+// src/main/java/ec/edu/ups/vista/CarritoAnadirView.java
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.CarritoController;
 import ec.edu.ups.controlador.ProductoController;
+import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.modelo.ItemCarrito;
 import ec.edu.ups.util.FormateadorUtils;
 import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -63,7 +67,14 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
     }
 
     private void configurarEventos() {
-        if (btnAnadir != null) btnAnadir.addActionListener(e -> carritoController.agregarProductoAlCarrito());
+        if (btnAnadir != null) btnAnadir.addActionListener(e -> {
+            Producto productoSeleccionado = obtenerProductoSeleccionado();
+            int cantidad = obtenerCantidad();
+            if (productoSeleccionado != null && cantidad > 0) {
+                carritoController.agregarProductoAlCarrito();
+                actualizarVistaCarrito();
+            }
+        });
         if (btnBuscar != null) btnBuscar.addActionListener(e -> carritoController.buscarProducto());
         if (btnGuardar != null) btnGuardar.addActionListener(e -> carritoController.guardarCarrito());
     }
@@ -115,7 +126,42 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
         txtTotal.setText(FormateadorUtils.formatearMoneda(total, locale));
     }
 
-    // Getters y Setters
+    public void actualizarVistaCarrito() {
+        List<ItemCarrito> items = carritoController.obtenerItemsCarrito();
+
+        DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
+        modelo.setRowCount(0);
+        for (ItemCarrito item : items) {
+            Object[] fila = {
+                    item.getProducto().getCodigo(),
+                    item.getProducto().getNombre(),
+                    FormateadorUtils.formatearMoneda(item.getProducto().getPrecio(), mensajeHandler.getLocale()),
+                    item.getCantidad(),
+                    FormateadorUtils.formatearMoneda(item.getSubtotal(), mensajeHandler.getLocale())
+            };
+            modelo.addRow(fila);
+        }
+    }
+
+    private Producto obtenerProductoSeleccionado() {
+        try {
+            int codigo = Integer.parseInt(txtCodigo.getText());
+            String nombre = txtNombre.getText();
+            double precio = Double.parseDouble(txtPrecio.getText());
+            return new Producto(codigo, nombre, precio);
+        } catch (Exception e) {
+            mostrarMensaje("Datos de producto inválidos.");
+            return null;
+        }
+    }
+
+    private int obtenerCantidad() {
+        try {
+            return Integer.parseInt((String) cbxCantidad.getSelectedItem());
+        } catch (Exception e) {
+            return 0;
+        }
+    }
 
     public JButton getBtnBuscar() { return btnBuscar; }
     public void setBtnBuscar(JButton btnBuscar) { this.btnBuscar = btnBuscar; }
@@ -162,6 +208,5 @@ public class CarritoAnadirView extends JInternalFrame implements Idioma {
     public CarritoController getCarritoController() { return carritoController; }
     public ProductoController getProductoController() { return productoController; }
     public void setProductoController(ProductoController productoController) { this.productoController = productoController; }
-    public void setCarritoAnadirView(CarritoAnadirView carritoAnadirView) {
-    }
+    public void setCarritoAnadirView(CarritoAnadirView carritoAnadirView) {}
 }

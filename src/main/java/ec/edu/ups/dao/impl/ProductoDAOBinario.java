@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoDAOBinario implements ProductoDAO {
-    private final String archivo;
+    private final File archivo;
 
-    public ProductoDAOBinario(String archivo) {
-        this.archivo = archivo;
+    public ProductoDAOBinario(String nombreArchivo) {
+        File carpeta = new File("data");
+        if (!carpeta.exists()) carpeta.mkdirs();
+        this.archivo = new File(carpeta, nombreArchivo);
     }
 
     @Override
@@ -24,9 +26,7 @@ public class ProductoDAOBinario implements ProductoDAO {
     @Override
     public Producto buscarPorCodigo(int codigo) {
         for (Producto p : listar()) {
-            if (p.getCodigo() == codigo) {
-                return p;
-            }
+            if (p.getCodigo() == codigo) return p;
         }
         return null;
     }
@@ -35,19 +35,17 @@ public class ProductoDAOBinario implements ProductoDAO {
     public List<Producto> buscarPorNombre(String nombre) {
         List<Producto> encontrados = new ArrayList<>();
         for (Producto p : listar()) {
-            if (p.getNombre().equalsIgnoreCase(nombre)) {
-                encontrados.add(p);
-            }
+            if (p.getNombre().equalsIgnoreCase(nombre)) encontrados.add(p);
         }
         return encontrados;
     }
 
     public Producto buscarPorId(String id) {
-        int codigo = Integer.parseInt(id);
-        return buscarPorCodigo(codigo);
+        return buscarPorCodigo(Integer.parseInt(id));
     }
 
     public List<Producto> listar() {
+        if (!archivo.exists()) return new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
             return (List<Producto>) ois.readObject();
         } catch (Exception e) {
@@ -75,8 +73,7 @@ public class ProductoDAOBinario implements ProductoDAO {
     }
 
     public void eliminar(String id) {
-        int codigo = Integer.parseInt(id);
-        eliminar(codigo);
+        eliminar(Integer.parseInt(id));
     }
 
     @Override

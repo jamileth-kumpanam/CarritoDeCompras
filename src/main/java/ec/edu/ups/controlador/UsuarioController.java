@@ -138,9 +138,9 @@ public class UsuarioController {
     public boolean recuperarContrasenia(String username, String respuesta1, String respuesta2, String respuesta3, String nuevaContrasenia) {
         Usuario usuario = usuarioDAO.buscarPorUsername(username);
         if (usuario != null &&
-                usuario.getRespuesta1().equals(respuesta1) &&
-                usuario.getRespuesta2().equals(respuesta2) &&
-                usuario.getRespuesta3().equals(respuesta3)) {
+                usuario.getRespuesta1() != null && usuario.getRespuesta1().equals(respuesta1) &&
+                usuario.getRespuesta2() != null && usuario.getRespuesta2().equals(respuesta2) &&
+                usuario.getRespuesta3() != null && usuario.getRespuesta3().equals(respuesta3)) {
             usuario.setContrasenia(nuevaContrasenia);
             usuarioDAO.actualizar(usuario);
             return true;

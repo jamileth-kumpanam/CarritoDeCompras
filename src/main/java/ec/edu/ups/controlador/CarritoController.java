@@ -108,42 +108,8 @@ public class CarritoController {
         }
     }
 
-    public void eliminarProductoDelCarrito() {
-        if (carritoModificarView == null) return;
-
-        int fila = carritoModificarView.getProductosTable().getSelectedRow();
-        if (fila == -1) {
-            mostrarMensaje("Seleccione un producto para eliminar.");
-            return;
-        }
-
-        DefaultTableModel modelo = (DefaultTableModel) carritoModificarView.getProductosTable().getModel();
-        int codigo = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
-        carritoService.eliminarProducto(codigo);
-        actualizarTablaProductos();
-        actualizarTotales();
-    }
-
-    public void modificarProductoEnCarrito() {
-        if (carritoModificarView == null) return;
-
-        int fila = carritoModificarView.getProductosTable().getSelectedRow();
-        if (fila == -1) {
-            mostrarMensaje("Seleccione un producto para modificar.");
-            return;
-        }
-
-        DefaultTableModel modelo = (DefaultTableModel) carritoModificarView.getProductosTable().getModel();
-        int codigo = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
-        int nuevaCantidad = Integer.parseInt((String) carritoModificarView.getCantidadComboBox().getSelectedItem());
-
-        carritoService.eliminarProducto(codigo);
-        Producto producto = productoDAO.buscarPorCodigo(codigo);
-        if (producto != null) {
-            carritoService.agregarProducto(producto, nuevaCantidad);
-        }
-        actualizarTablaProductos();
-        actualizarTotales();
+    public List<ItemCarrito> obtenerItemsCarrito() {
+        return carritoService.obtenerItems();
     }
 
     public void guardarCarrito() {
@@ -204,5 +170,43 @@ public class CarritoController {
         } else if (carritoModificarView != null && carritoModificarView.isVisible()) {
             JOptionPane.showMessageDialog(carritoModificarView, mensaje);
         }
+    }
+
+    public void modificarProductoEnCarrito() {
+        if (carritoModificarView == null) return;
+
+        int fila = carritoModificarView.getProductosTable().getSelectedRow();
+        if (fila == -1) {
+            mostrarMensaje("Seleccione un producto para modificar.");
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) carritoModificarView.getProductosTable().getModel();
+        int codigo = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+        int nuevaCantidad = Integer.parseInt((String) carritoModificarView.getCantidadComboBox().getSelectedItem());
+
+        carritoService.eliminarProducto(codigo);
+        Producto producto = productoDAO.buscarPorCodigo(codigo);
+        if (producto != null) {
+            carritoService.agregarProducto(producto, nuevaCantidad);
+        }
+        actualizarTablaProductos();
+        actualizarTotales();
+    }
+
+    public void eliminarProductoDelCarrito() {
+        if (carritoModificarView == null) return;
+
+        int fila = carritoModificarView.getProductosTable().getSelectedRow();
+        if (fila == -1) {
+            mostrarMensaje("Seleccione un producto para eliminar.");
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) carritoModificarView.getProductosTable().getModel();
+        int codigo = Integer.parseInt(modelo.getValueAt(fila, 0).toString());
+        carritoService.eliminarProducto(codigo);
+        actualizarTablaProductos();
+        actualizarTotales();
     }
 }

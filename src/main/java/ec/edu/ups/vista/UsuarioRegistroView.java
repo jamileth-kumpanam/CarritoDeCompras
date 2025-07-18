@@ -1,10 +1,11 @@
 package ec.edu.ups.vista;
 
 import ec.edu.ups.controlador.UsuarioController;
-import ec.edu.ups.modelo.Rol;
-import ec.edu.ups.modelo.Usuario;
-import ec.edu.ups.util.Idioma;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
+import ec.edu.ups.util.Idioma;
+import ec.edu.ups.util.Validaciones;
+import ec.edu.ups.util.excepciones.CedulaInvalidaException;
+import ec.edu.ups.util.excepciones.PasswordInvalidaException;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -62,18 +63,25 @@ public class UsuarioRegistroView extends JInternalFrame implements Idioma {
             return;
         }
 
-        usuarioController.registrarUsuario(
-                nombre,
-                contrasenia,
-                nacimiento,
-                telefono,
-                correo,
-                usuario
-        );
+        try {
+            Validaciones.validarCedula(usuario);
+            Validaciones.validarPassword(contrasenia);
 
-        mostrarMensaje("Registro exitoso.");
-        limpiarCampos();
-        dispose();
+            usuarioController.registrarUsuario(
+                    nombre,
+                    contrasenia,
+                    nacimiento,
+                    telefono,
+                    correo,
+                    usuario
+            );
+
+            mostrarMensaje("Registro exitoso.");
+            limpiarCampos();
+            dispose();
+        } catch (CedulaInvalidaException | PasswordInvalidaException e) {
+            mostrarMensaje(e.getMessage());
+        }
     }
 
     public void limpiarCampos() {

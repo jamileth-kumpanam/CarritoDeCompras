@@ -101,7 +101,6 @@ public class MenuPrincipalView extends JFrame {
             jDesktopPane.add(view);
             view.setVisible(true);
         });
-
         menuCarrito.add(itemAnadirCarrito);
         menuCarrito.add(itemModificarCarrito);
         menuCarrito.add(itemListarCarrito);
