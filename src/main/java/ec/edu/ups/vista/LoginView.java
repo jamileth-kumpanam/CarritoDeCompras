@@ -30,26 +30,47 @@ public class LoginView extends JFrame {
                      UsuarioController usuarioController,
                      ProductoController productoController,
                      CarritoController carritoController) {
+        initComponents(); // ¡Ahora sí inicializa todo!
+
         this.mensajeHandler = handler;
         this.usuarioController = usuarioController;
 
-        setContentPane(panelPrincipal);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(600, 400);
-        setLocationRelativeTo(null);
-
-        inicializarComponentes();
-        configurarEventos(productoController, carritoController);
-    }
-
-    private void inicializarComponentes() {
-        // Configura el combo de idiomas según tus necesidades
         cbxIdioma.removeAllItems();
         cbxIdioma.addItem("Español");
         cbxIdioma.addItem("English");
         cbxIdioma.addItem("Français");
 
+        configurarEventos(productoController, carritoController);
         actualizarTextos();
+
+        setContentPane(panelPrincipal);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(600, 400);
+        setLocationRelativeTo(null);
+    }
+
+    private void initComponents() {
+        panelPrincipal = new JPanel();
+        txtUsername = new JTextField();
+        txtContrasenia = new JPasswordField();
+        btnIniciarSesion = new JButton();
+        btnRegistrarse = new JButton();
+        btnOlvidoContrasenia = new JButton();
+        cbxIdioma = new JComboBox<>();
+        lblUsuario = new JLabel();
+        lblContrasenia = new JLabel();
+        lblIdioma = new JLabel();
+
+        panelPrincipal.setLayout(new BoxLayout(panelPrincipal, BoxLayout.Y_AXIS));
+        panelPrincipal.add(lblUsuario);
+        panelPrincipal.add(txtUsername);
+        panelPrincipal.add(lblContrasenia);
+        panelPrincipal.add(txtContrasenia);
+        panelPrincipal.add(lblIdioma);
+        panelPrincipal.add(cbxIdioma);
+        panelPrincipal.add(btnIniciarSesion);
+        panelPrincipal.add(btnRegistrarse);
+        panelPrincipal.add(btnOlvidoContrasenia);
     }
 
     private void configurarEventos(ProductoController productoController, CarritoController carritoController) {
