@@ -70,7 +70,7 @@ public class Producto implements Serializable {
 
     /**
      * Crea un producto a partir de una cadena de texto.
-     * @param linea Cadena con los datos del producto.
+     * @paramlinea Cadena con los datos del producto.
      * @return Producto creado.
      */
     public double getPrecio() {

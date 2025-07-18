@@ -1,24 +1,43 @@
 package ec.edu.ups.modelo;
 
 import java.io.Serializable;
-
+/**
+ * Representa un usuario del sistema, con credenciales, datos personales y rol.
+ */
 public class Usuario implements Serializable {
+    /** Código único del usuario. */
     private int codigo;
+    /** Nombre de usuario (login). */
     private String username;
+    /** Contraseña del usuario. */
     private String contrasenia;
+    /** Rol del usuario (ADMINISTRADOR o USUARIO). */
     private Rol rol;
+    /** Preguntas y respuestas de seguridad. */
     private String pregunta1, respuesta1, pregunta2, respuesta2, pregunta3, respuesta3;
+    /** Datos personales. */
     private String nombre, fechaNacimiento, telefono, correo;
-
+    /** Constructor vacío. */
     public Usuario() {}
-
+    /**
+     * Constructor con código, nombre, username y contraseña.
+     * @param codigo Código del usuario.
+     * @param nombre Nombre real.
+     * @param username Nombre de usuario.
+     * @param contrasenia Contraseña.
+     */
     public Usuario(int codigo, String nombre, String username, String contrasenia) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.username = username;
         this.contrasenia = contrasenia;
     }
-
+    /**
+     * Constructor con username, contraseña y rol.
+     * @param username Nombre de usuario.
+     * @param contrasenia Contraseña.
+     * @param rol Rol del usuario.
+     */
     public Usuario(String username, String contrasenia, Rol rol) {
         this.username = username;
         this.contrasenia = contrasenia;
@@ -129,7 +148,11 @@ public class Usuario implements Serializable {
     public void setCorreo(String correo) {
         this.correo = correo;
     }
-
+    /**
+     * Crea un objeto Usuario a partir de una línea de texto.
+     * @param linea Línea con los datos del usuario.
+     * @return Usuario creado.
+     */
     public static Usuario desdeString(String linea) {
         String[] partes = linea.split(";");
         int id = Integer.parseInt(partes[0]);
@@ -138,11 +161,11 @@ public class Usuario implements Serializable {
         String contrasenia = partes[3];
         return new Usuario(id, nombre, username, contrasenia);
     }
-
+    /** @return Código único del usuario. */
     public int getCodigo() {
         return codigo;
     }
-
+    /** @return Representación en texto del usuario. */
     @Override
     public String toString() {
         return "Usuario{" +
@@ -151,7 +174,7 @@ public class Usuario implements Serializable {
                 ", rol=" + rol +
                 '}';
     }
-
+    /** @param usuarioNombre Nombre de usuario a asignar. */
     public void setUsuario(String usuarioNombre) {
         this.username = usuarioNombre;
     }

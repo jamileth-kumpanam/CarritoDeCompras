@@ -13,16 +13,41 @@ import ec.edu.ups.vista.CarritoModificarView;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.List;
-
+/**
+ * Controlador para la gestión del carrito de compras: agregar, modificar, eliminar productos y guardar el carrito.
+ */
 public class CarritoController {
-
+    /**
+     * DAO para operaciones de carrito.
+     */
     private final CarritoDAO carritoDAO;
+    /**
+     * DAO para operaciones de producto.
+     */
     private final ProductoDAO productoDAO;
+    /**
+     * Vista para añadir productos al carrito.
+     */
     private CarritoAnadirView carritoAnadirView;
+    /**
+     * Vista para modificar productos en el carrito.
+     */
     private CarritoModificarView carritoModificarView;
+    /**
+     * Manejador de mensajes internacionalizados.
+     */
     private final MensajeInternacionalizacionHandler mensajeHandler;
+    /**
+     * Servicio para la lógica del carrito.
+     */
     private final CarritoServiceImpl carritoService;
-
+    /**
+     * Constructor del controlador de carrito.
+     * @param carritoDAO DAO de carrito.
+     * @param productoDAO DAO de producto.
+     * @param carritoModificarView Vista de modificación de carrito.
+     * @param mensajeHandler Manejador de mensajes.
+     */
     public CarritoController(CarritoDAO carritoDAO, ProductoDAO productoDAO, CarritoModificarView carritoModificarView, MensajeInternacionalizacionHandler mensajeHandler) {
         this.carritoDAO = carritoDAO;
         this.productoDAO = productoDAO;
@@ -31,14 +56,23 @@ public class CarritoController {
         this.carritoService = new CarritoServiceImpl();
     }
 
+    /**
+     * Asigna la vista de añadir producto al carrito.
+     * @param carritoAnadirView Vista de añadir producto.
+     */
     public void setCarritoAnadirView(CarritoAnadirView carritoAnadirView) {
         this.carritoAnadirView = carritoAnadirView;
     }
-
+    /**
+     * Asigna la vista de modificar productos en el carrito.
+     * @param carritoModificarView Vista de modificar productos.
+     */
     public void setCarritoModificarView(CarritoModificarView carritoModificarView) {
         this.carritoModificarView = carritoModificarView;
     }
-
+    /**
+     * Busca un producto por código y muestra sus datos en la vista correspondiente.
+     */
     public void buscarProducto() {
         String codigoStr;
         JTextField txtCodigo;
@@ -78,7 +112,9 @@ public class CarritoController {
             mostrarMensaje("Código inválido.");
         }
     }
-
+    /**
+     * Agrega un producto al carrito usando los datos de la vista.
+     */
     public void agregarProductoAlCarrito() {
         if (carritoAnadirView == null) return;
 
@@ -107,11 +143,16 @@ public class CarritoController {
             mostrarMensaje("Datos inválidos.");
         }
     }
-
+    /**
+     * Obtiene la lista de ítems del carrito.
+     * @return Lista de ítems.
+     */
     public List<ItemCarrito> obtenerItemsCarrito() {
         return carritoService.obtenerItems();
     }
-
+    /**
+     * Guarda el carrito actual y lo vacía.
+     */
     public void guardarCarrito() {
         List<ItemCarrito> items = carritoService.obtenerItems();
         if (items.isEmpty()) {
@@ -126,7 +167,9 @@ public class CarritoController {
         actualizarTablaProductos();
         actualizarTotales();
     }
-
+    /**
+     * Actualiza la tabla de productos en la vista.
+     */
     private void actualizarTablaProductos() {
         List<ItemCarrito> items = carritoService.obtenerItems();
         DefaultTableModel modelo;
@@ -149,7 +192,9 @@ public class CarritoController {
             modelo.addRow(fila);
         }
     }
-
+    /**
+     * Actualiza los totales (subtotal, IVA, total) en la vista.
+     */
     private void actualizarTotales() {
         double subtotal = carritoService.calcularTotal();
         double iva = subtotal * 0.12;
@@ -163,7 +208,10 @@ public class CarritoController {
             carritoModificarView.getTotalTextField().setText(String.format("%.2f", total));
         }
     }
-
+    /**
+     * Muestra un mensaje en la vista correspondiente.
+     * @param mensaje Mensaje a mostrar.
+     */
     private void mostrarMensaje(String mensaje) {
         if (carritoAnadirView != null && carritoAnadirView.isVisible()) {
             carritoAnadirView.mostrarMensaje(mensaje);
@@ -171,7 +219,9 @@ public class CarritoController {
             JOptionPane.showMessageDialog(carritoModificarView, mensaje);
         }
     }
-
+    /**
+     * Modifica la cantidad de un producto en el carrito.
+     */
     public void modificarProductoEnCarrito() {
         if (carritoModificarView == null) return;
 
@@ -193,7 +243,9 @@ public class CarritoController {
         actualizarTablaProductos();
         actualizarTotales();
     }
-
+    /**
+     * Elimina un producto del carrito.
+     */
     public void eliminarProductoDelCarrito() {
         if (carritoModificarView == null) return;
 

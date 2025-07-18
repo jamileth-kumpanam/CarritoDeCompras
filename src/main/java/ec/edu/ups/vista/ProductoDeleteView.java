@@ -7,7 +7,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para eliminar productos existentes.
+ * Permite buscar productos por código y eliminarlos.
+ */
 public class ProductoDeleteView extends JInternalFrame implements Idioma {
 
     private JPanel EliminarProductos;

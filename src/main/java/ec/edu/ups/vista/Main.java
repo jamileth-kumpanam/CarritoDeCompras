@@ -6,7 +6,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.util.Locale;
-
+/**
+ * Clase principal que inicia la aplicación Swing.
+ * Configura el tipo de almacenamiento y muestra la ventana de login.
+ */
 public class Main {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

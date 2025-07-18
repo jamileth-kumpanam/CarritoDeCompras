@@ -10,7 +10,10 @@ import ec.edu.ups.util.excepciones.PasswordInvalidaException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para el cambio de contraseña de un usuario.
+ * Permite ingresar la contraseña actual y la nueva, validando los requisitos.
+ */
 public class CambioContraseniaView extends JInternalFrame implements Idioma {
 
     private JPanel CambioDeContraseña;

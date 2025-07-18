@@ -7,7 +7,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para añadir un nuevo producto.
+ * Permite ingresar los datos del producto y guardarlo.
+ */
 public class ProductoAnadirView extends JInternalFrame implements Idioma {
 
     private JPanel panelPrincipal;

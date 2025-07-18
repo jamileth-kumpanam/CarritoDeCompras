@@ -14,7 +14,11 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para añadir productos al carrito de compras.
+ * Permite buscar productos, seleccionar cantidad y agregar al carrito.
+ * Muestra los productos añadidos y los totales calculados.
+ */
 public class CarritoAnadirView extends JInternalFrame implements Idioma {
 
     private JButton btnBuscar;

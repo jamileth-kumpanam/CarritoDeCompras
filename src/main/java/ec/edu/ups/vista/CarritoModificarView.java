@@ -10,7 +10,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para modificar o eliminar productos del carrito.
+ * Permite buscar, modificar cantidades, eliminar productos y guardar cambios.
+ */
 public class CarritoModificarView extends JInternalFrame implements Idioma {
 
     private JPanel panelPrincipal;

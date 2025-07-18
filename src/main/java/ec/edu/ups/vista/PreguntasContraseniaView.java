@@ -6,7 +6,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 
 public class PreguntasContraseniaView extends JInternalFrame {
-
+    /**
+     * Ventana interna para responder preguntas de seguridad y recuperar la contraseña.
+     * Permite ingresar respuestas y establecer una nueva contraseña.
+     */
     private JPanel PreguntasDeSeguridad;
     private JLabel lblP;
     private JLabel lblP1;

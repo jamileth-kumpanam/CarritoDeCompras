@@ -7,7 +7,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para mostrar la lista de productos en el carrito.
+ * Permite visualizar los productos agregados y cerrar la vista.
+ */
 public class CarritoListaView extends JInternalFrame implements Idioma {
 
     private JPanel panelPrincipal;

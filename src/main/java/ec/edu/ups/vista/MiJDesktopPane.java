@@ -2,7 +2,10 @@ package ec.edu.ups.vista;
 
 import javax.swing.*;
 import java.awt.*;
-
+/**
+ * JDesktopPane personalizado con fondo gráfico (cielo, césped, montañas, sol).
+ * Se utiliza como contenedor principal de las ventanas internas.
+ */
 public class MiJDesktopPane extends JDesktopPane {
 
     public MiJDesktopPane() {

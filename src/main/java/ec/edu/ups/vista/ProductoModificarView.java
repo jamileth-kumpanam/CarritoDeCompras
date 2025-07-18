@@ -7,7 +7,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para modificar los datos de un producto existente.
+ * Permite buscar, actualizar y limpiar los campos del producto.
+ */
 public class ProductoModificarView extends JInternalFrame implements Idioma {
 
     private JTextField txtCodigo;

@@ -10,7 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para listar y buscar productos.
+ * Permite buscar por nombre y mostrar todos los productos.
+ */
 public class ProductoListaView extends JInternalFrame implements Idioma {
 
     private JTextField txtBuscar;

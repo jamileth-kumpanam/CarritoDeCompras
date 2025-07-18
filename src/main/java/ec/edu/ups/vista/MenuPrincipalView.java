@@ -6,7 +6,11 @@ import ec.edu.ups.controlador.UsuarioController;
 import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 
 import javax.swing.*;
-
+/**
+ * Ventana principal del menú de la aplicación.
+ * Contiene menús para gestionar usuarios, productos y carritos.
+ * Utiliza un JDesktopPane personalizado para mostrar subventanas.
+ */
 public class MenuPrincipalView extends JFrame {
 
     private MiJDesktopPane jDesktopPane;

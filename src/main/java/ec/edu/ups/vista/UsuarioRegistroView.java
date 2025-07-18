@@ -10,7 +10,10 @@ import ec.edu.ups.util.excepciones.PasswordInvalidaException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
-
+/**
+ * Ventana interna para el registro de nuevos usuarios.
+ * Permite ingresar datos personales, validar y registrar un usuario.
+ */
 public class UsuarioRegistroView extends JInternalFrame implements Idioma {
 
     private JPanel RegistroUsuario;

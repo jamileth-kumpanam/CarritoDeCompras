@@ -9,7 +9,10 @@ import ec.edu.ups.util.MensajeInternacionalizacionHandler;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
-
+/**
+ * Ventana principal de inicio de sesión.
+ * Permite autenticarse, registrarse, recuperar contraseña y cambiar idioma.
+ */
 public class LoginView extends JFrame {
 
     private JPanel panelPrincipal;
