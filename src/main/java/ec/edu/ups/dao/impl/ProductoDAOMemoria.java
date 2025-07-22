@@ -5,6 +5,7 @@ import ec.edu.ups.modelo.Producto;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Implementación de la interfaz ProductoDAO que almacena los productos en memoria.
  * Utiliza una lista interna para gestionar los productos durante la ejecución de la aplicación.
@@ -12,6 +13,14 @@ import java.util.List;
 public class ProductoDAOMemoria implements ProductoDAO {
     /** Lista interna que almacena los productos en memoria. */
     private final List<Producto> productos = new ArrayList<>();
+
+    /**
+     * Constructor por defecto. Inicializa la lista de productos en memoria.
+     */
+    public ProductoDAOMemoria() {
+
+    }
+
     /**
      * Agrega un nuevo producto a la lista en memoria.
      * @param producto Producto a agregar.
@@ -20,6 +29,7 @@ public class ProductoDAOMemoria implements ProductoDAO {
     public void crear(Producto producto) {
         productos.add(producto);
     }
+
     /**
      * Busca un producto por su código en la lista en memoria.
      * @param codigo Código del producto a buscar.
@@ -32,6 +42,7 @@ public class ProductoDAOMemoria implements ProductoDAO {
                 .findFirst()
                 .orElse(null);
     }
+
     /**
      * Busca productos por su nombre (ignorando mayúsculas/minúsculas).
      * @param nombre Nombre del producto a buscar.
@@ -47,6 +58,7 @@ public class ProductoDAOMemoria implements ProductoDAO {
         }
         return resultado;
     }
+
     /**
      * Actualiza un producto existente en la lista en memoria.
      * Elimina el producto anterior y agrega el actualizado.
@@ -57,6 +69,7 @@ public class ProductoDAOMemoria implements ProductoDAO {
         eliminar(producto.getCodigo());
         crear(producto);
     }
+
     /**
      * Elimina un producto de la lista en memoria por su código.
      * @param codigo Código del producto a eliminar.
@@ -65,6 +78,7 @@ public class ProductoDAOMemoria implements ProductoDAO {
     public void eliminar(int codigo) {
         productos.removeIf(p -> p.getCodigo() == codigo);
     }
+
     /**
      * Devuelve una copia de la lista de todos los productos en memoria.
      * @return Lista de productos.

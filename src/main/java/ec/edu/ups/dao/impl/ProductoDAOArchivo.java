@@ -9,92 +9,96 @@ import java.util.List;
 
 /**
  * Implementación de ProductoDAO que almacena los productos en un archivo de texto.
- * Los datos se guardan en la carpeta 'data' junto al .jar.
+ * La ruta base y archivo se pasan en el constructor.
  */
-
 public class ProductoDAOArchivo implements ProductoDAO {
     private final File archivo;
 
     /**
-     * Crea una instancia que usará el archivo especificado para almacenar productos.
-     * @param nombreArchivo Nombre del archivo de texto.
+     * Constructor que recibe la ruta base y usa "productos.txt" dentro de esa ruta.
+     * @param rutaBase Ruta donde se almacenará el archivo.
      */
+    public ProductoDAOArchivo(String rutaBase) {
+        File carpeta = new File(rutaBase);
+        if (!carpeta.exists()) {
+            if (!carpeta.mkdirs()) {
+                throw new RuntimeException("No se pudo crear la carpeta: " + rutaBase);
+            }
+        }
+        this.archivo = new File(carpeta, "productos.txt");
+        precargarProductos();
+    }
 
-    public ProductoDAOArchivo(String nombreArchivo) {
-        /**
-         * Guarda un producto en el archivo.
-         * @param producto Producto a guardar.
-         */
-        File carpeta = new File("data");
-        if (!carpeta.exists()) carpeta.mkdirs();
-        this.archivo = new File(carpeta, nombreArchivo);
+    /**
+     * Precarga productos básicos en el archivo si no existe o está vacío.
+     */
+    private void precargarProductos() {
+        if (archivo.exists() && archivo.length() > 0) {
+            return; // Ya hay datos, no hacer nada
+        }
+        List<Producto> productosIniciales = List.of(
+                new Producto(1, "Producto A", 10.0),
+                new Producto(2, "Producto B", 20.0),
+                new Producto(3, "Producto C", 30.0)
+        );
+        guardarProductos(productosIniciales);
     }
 
     @Override
     public void crear(Producto producto) {
-        /**
-         * Busca un producto por su código.
-         * @param codigo Código del producto.
-         * @return Producto encontrado o null.
-         */
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo, true))) {
-            writer.write(producto.getCodigo() + ";" + producto.getNombre() + ";" + producto.getPrecio());
-            writer.newLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<Producto> productos = listar();
+        productos.add(producto);
+        guardarProductos(productos);
     }
 
     @Override
     public Producto buscarPorCodigo(int codigo) {
-        /**
-         * Busca productos por nombre.
-         * @param nombre Nombre a buscar.
-         * @return Lista de productos encontrados.
-         */
-        for (Producto p : listar()) {
-            if (p.getCodigo() == codigo) return p;
-        }
-        return null;
+        return listar().stream()
+                .filter(p -> p.getCodigo() == codigo)
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
     public List<Producto> buscarPorNombre(String nombre) {
-        /**
-         * Actualiza un producto existente.
-         * @param producto Producto actualizado.
-         */
         List<Producto> encontrados = new ArrayList<>();
         for (Producto p : listar()) {
-            if (p.getNombre().equalsIgnoreCase(nombre)) encontrados.add(p);
+            if (p.getNombre().equalsIgnoreCase(nombre)) {
+                encontrados.add(p);
+            }
         }
         return encontrados;
     }
 
     public Producto buscarPorId(String id) {
-        return buscarPorCodigo(Integer.parseInt(id));
+        try {
+            return buscarPorCodigo(Integer.parseInt(id));
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     public List<Producto> listar() {
         List<Producto> productos = new ArrayList<>();
+        if (!archivo.exists()) {
+            return productos; // archivo no existe aún
+        }
         try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
-                productos.add(Producto.desdeString(linea));
+                Producto p = Producto.desdeString(linea);
+                if (p != null) {
+                    productos.add(p);
+                }
             }
         } catch (IOException e) {
-            // Si el archivo no existe, retorna lista vacía
+            e.printStackTrace();
         }
         return productos;
     }
 
     @Override
     public void actualizar(Producto producto) {
-        /**
-         * Elimina un producto por su código.
-         * @param codigo Código del producto a eliminar.
-         */
-
         List<Producto> productos = listar();
         for (int i = 0; i < productos.size(); i++) {
             if (productos.get(i).getCodigo() == producto.getCodigo()) {
@@ -107,17 +111,16 @@ public class ProductoDAOArchivo implements ProductoDAO {
 
     @Override
     public void eliminar(int codigo) {
-        /**
-         * Lista todos los productos almacenados.
-         * @return Lista de productos.
-         */
         List<Producto> productos = listar();
         productos.removeIf(p -> p.getCodigo() == codigo);
         guardarProductos(productos);
     }
 
     public void eliminar(String id) {
-        eliminar(Integer.parseInt(id));
+        try {
+            eliminar(Integer.parseInt(id));
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     @Override

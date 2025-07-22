@@ -2,28 +2,65 @@ package ec.edu.ups.dao.impl;
 
 import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.modelo.Carrito;
+import ec.edu.ups.modelo.ItemCarrito;
+import ec.edu.ups.modelo.Producto;
+import ec.edu.ups.modelo.Usuario;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
+
 /**
  * Implementación de CarritoDAO que almacena los carritos en memoria.
+ * Se puede inicializar con una "ruta" (por compatibilidad), pero no se usa realmente.
+ * Precarga algunos carritos al iniciar.
  */
 public class CarritoDAOMemoria implements CarritoDAO {
-    /** Lista interna que almacena los carritos en memoria. */
-    private final List<Carrito> carritos = new ArrayList<>();
+
+    private final List<Carrito> carritos;
+
     /**
-     * Agrega un nuevo carrito a la lista en memoria.
-     * @param carrito Carrito a agregar.
+     * Constructor sin ruta (por compatibilidad).
      */
+    public CarritoDAOMemoria() {
+        this.carritos = new ArrayList<>();
+        precargarCarritos();
+    }
+
+    /**
+     * Constructor con ruta (no usado pero por consistencia con otros DAO).
+     * @param ruta Ruta de archivos (ignorada).
+     */
+    public CarritoDAOMemoria(String ruta) {
+        this.carritos = new ArrayList<>();
+        precargarCarritos();
+    }
+
+    /**
+     * Precarga carritos básicos en memoria para pruebas iniciales.
+     */
+    private void precargarCarritos() {
+        Usuario usuario1 = new Usuario();
+        usuario1.setUsername("admin");
+
+        Producto producto1 = new Producto(1, "Producto 1", 10.0);
+        Producto producto2 = new Producto(2, "Producto 2", 20.0);
+
+        List<ItemCarrito> items1 = new ArrayList<>();
+        items1.add(new ItemCarrito(producto1, 2));
+        items1.add(new ItemCarrito(producto2, 1));
+
+        Carrito carrito1 = new Carrito(new GregorianCalendar(), items1, usuario1);
+        carrito1.setCodigo(1);
+
+        carritos.add(carrito1);
+    }
+
     @Override
     public void crear(Carrito carrito) {
         carritos.add(carrito);
     }
-    /**
-     * Busca un carrito por su código en la lista en memoria.
-     * @param codigo Código del carrito a buscar.
-     * @return Carrito encontrado o null si no existe.
-     */
+
     @Override
     public Carrito buscarPorCodigo(int codigo) {
         return carritos.stream()
@@ -31,27 +68,18 @@ public class CarritoDAOMemoria implements CarritoDAO {
                 .findFirst()
                 .orElse(null);
     }
-    /**
-     * Actualiza un carrito existente en la lista en memoria.
-     * @param carrito Carrito con los datos actualizados.
-     */
+
     @Override
     public void actualizar(Carrito carrito) {
         eliminar(carrito.getCodigo());
         crear(carrito);
     }
-    /**
-     * Elimina un carrito de la lista en memoria por su código.
-     * @param codigo Código del carrito a eliminar.
-     */
+
     @Override
     public void eliminar(int codigo) {
         carritos.removeIf(c -> c.getCodigo() == codigo);
     }
-    /**
-     * Guarda un carrito: si existe lo actualiza, si no lo crea.
-     * @param carrito Carrito a guardar.
-     */
+
     @Override
     public void guardar(Carrito carrito) {
         Carrito existente = buscarPorCodigo(carrito.getCodigo());
@@ -61,10 +89,7 @@ public class CarritoDAOMemoria implements CarritoDAO {
             crear(carrito);
         }
     }
-    /**
-     * Devuelve una copia de la lista de todos los carritos en memoria.
-     * @return Lista de carritos.
-     */
+
     @Override
     public List<Carrito> listarTodos() {
         return new ArrayList<>(carritos);

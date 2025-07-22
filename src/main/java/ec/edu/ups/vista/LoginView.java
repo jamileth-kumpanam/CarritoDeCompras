@@ -33,7 +33,7 @@ public class LoginView extends JFrame {
                      UsuarioController usuarioController,
                      ProductoController productoController,
                      CarritoController carritoController) {
-        initComponents(); // ¡Ahora sí inicializa todo!
+        initComponents();
 
         this.mensajeHandler = handler;
         this.usuarioController = usuarioController;

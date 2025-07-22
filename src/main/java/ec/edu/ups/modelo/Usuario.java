@@ -44,6 +44,14 @@ public class Usuario implements Serializable {
         this.rol = rol;
     }
 
+    public Usuario(int codigo, String nombre, String username, String contrasenia, Rol rol) {
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.username = username;
+        this.contrasenia = contrasenia;
+        this.rol = rol;
+    }
+
 
     public String getUsername() {
         return username;

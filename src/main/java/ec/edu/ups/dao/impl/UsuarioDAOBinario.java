@@ -7,25 +7,39 @@ import ec.edu.ups.modelo.Usuario;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * Implementación de UsuarioDAO que almacena los usuarios en un archivo binario.
  */
 public class UsuarioDAOBinario implements UsuarioDAO {
-    /** Ruta del archivo binario donde se almacenan los usuarios. */
-    private final String archivo;
+
+    private final File archivo;
+
     /**
-     * Constructor que recibe la ruta del archivo binario.
-     * @param archivo Ruta del archivo binario.
+     * Constructor que recibe la ruta base y usa "usuarios.bin" dentro de esa ruta.
+     * @param rutaBase Ruta donde se almacenará el archivo binario.
      */
-    public UsuarioDAOBinario(String archivo) {
-        this.archivo = archivo;
+    public UsuarioDAOBinario(String rutaBase) {
+        File carpeta = new File(rutaBase);
+        if (!carpeta.exists()) {
+            carpeta.mkdirs();
+        }
+        this.archivo = new File(carpeta, "usuarios.bin");
+        precargarUsuarios(); // opcional, quita esta línea si no quieres precarga
     }
+
     /**
-     * Autentica un usuario verificando nombre de usuario y contraseña.
-     * @param username Nombre de usuario.
-     * @param contrasenia Contraseña.
-     * @return Usuario autenticado o null si no coincide.
+     * Precarga usuarios básicos en el archivo si no existe o está vacío.
      */
+    private void precargarUsuarios() {
+        if (archivo.exists() && archivo.length() > 0) return; // Ya hay datos
+
+        List<Usuario> usuariosIniciales = new ArrayList<>();
+        usuariosIniciales.add(new Usuario(1, "Administrador", "admin", "1234", Rol.ADMINISTRADOR));
+        usuariosIniciales.add(new Usuario(2, "Usuario Básico", "user", "1234", Rol.USUARIO));
+        guardarUsuarios(usuariosIniciales);
+    }
+
     @Override
     public Usuario autenticar(String username, String contrasenia) {
         for (Usuario usuario : listar()) {
@@ -35,21 +49,14 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
         return null;
     }
-    /**
-     * Crea un nuevo usuario y lo agrega al archivo binario.
-     * @param usuario Usuario a crear.
-     */
+
     @Override
     public void crear(Usuario usuario) {
         List<Usuario> usuarios = listar();
         usuarios.add(usuario);
         guardarUsuarios(usuarios);
     }
-    /**
-     * Busca un usuario por su nombre de usuario en el archivo binario.
-     * @param username Nombre de usuario.
-     * @return Usuario encontrado o null.
-     */
+
     @Override
     public Usuario buscarPorUsername(String username) {
         for (Usuario usuario : listar()) {
@@ -59,11 +66,7 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
         return null;
     }
-    /**
-     * Busca un usuario por su id (código) en el archivo binario.
-     * @param id Código del usuario.
-     * @return Usuario encontrado o null.
-     */
+
     public Usuario buscarPorId(int id) {
         for (Usuario usuario : listar()) {
             if (usuario.getCodigo() == id) {
@@ -72,64 +75,51 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
         return null;
     }
-    /**
-     * Lista todos los usuarios almacenados en el archivo binario.
-     * @return Lista de usuarios.
-     */
+
     public List<Usuario> listar() {
+        if (!archivo.exists() || archivo.length() == 0) {
+            return new ArrayList<>();
+        }
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
             return (List<Usuario>) ois.readObject();
         } catch (Exception e) {
+            e.printStackTrace();
             return new ArrayList<>();
         }
     }
-    /**
-     * Actualiza la información de un usuario existente en el archivo binario.
-     * @param usuario Usuario con datos actualizados.
-     */
+
     @Override
     public void actualizar(Usuario usuario) {
         List<Usuario> usuarios = listar();
         for (int i = 0; i < usuarios.size(); i++) {
             if (usuarios.get(i).getCodigo() == usuario.getCodigo()) {
                 usuarios.set(i, usuario);
-                break;
+                guardarUsuarios(usuarios);
+                return;
             }
         }
-        guardarUsuarios(usuarios);
+        // Si no existía, agregar nuevo
+        crear(usuario);
     }
-    /**
-     * Elimina un usuario del archivo binario por su id (código).
-     * @param id Código del usuario a eliminar.
-     */
+
     public void eliminar(int id) {
         List<Usuario> usuarios = listar();
         usuarios.removeIf(u -> u.getCodigo() == id);
         guardarUsuarios(usuarios);
     }
-    /**
-     * Elimina un usuario del archivo binario por su nombre de usuario.
-     * @param username Nombre de usuario a eliminar.
-     */
+
     @Override
     public void eliminar(String username) {
         List<Usuario> usuarios = listar();
         usuarios.removeIf(u -> u.getUsername().equals(username));
         guardarUsuarios(usuarios);
     }
-    /**
-     * Devuelve la lista de todos los usuarios almacenados en el archivo binario.
-     * @return Lista de usuarios.
-     */
+
     @Override
     public List<Usuario> listarTodos() {
         return listar();
     }
-    /**
-     * Lista los usuarios que tienen un rol específico.
-     * @param rol Rol a filtrar.
-     * @return Lista de usuarios con el rol dado.
-     */
+
     @Override
     public List<Usuario> listarPorRol(Rol rol) {
         List<Usuario> usuariosPorRol = new ArrayList<>();
@@ -140,18 +130,17 @@ public class UsuarioDAOBinario implements UsuarioDAO {
         }
         return usuariosPorRol;
     }
-    /**
-     * Guarda un usuario en el archivo binario (crea uno nuevo).
-     * @param nuevoUsuario Usuario a guardar.
-     */
+
     @Override
     public void guardar(Usuario nuevoUsuario) {
-        crear(nuevoUsuario);
+        Usuario existente = buscarPorUsername(nuevoUsuario.getUsername());
+        if (existente == null) {
+            crear(nuevoUsuario);
+        } else {
+            actualizar(nuevoUsuario);
+        }
     }
-    /**
-     * Guarda la lista de usuarios en el archivo binario.
-     * @param usuarios Lista de usuarios a guardar.
-     */
+
     private void guardarUsuarios(List<Usuario> usuarios) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(usuarios);

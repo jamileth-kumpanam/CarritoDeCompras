@@ -9,4 +9,5 @@ public enum Rol implements Serializable {
     ADMINISTRADOR,
     /** Rol de usuario estándar. */
     USUARIO
+
 }

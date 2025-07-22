@@ -1,4 +1,4 @@
-package ec.edu.ups.dao.impl;
+package ec.edu.ups.dao.impl.archivos;
 
 import ec.edu.ups.dao.CarritoDAO;
 import ec.edu.ups.modelo.Carrito;
@@ -7,20 +7,16 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarritoDAOBinario implements CarritoDAO {
+public class CarritoDAOArchivoBinario implements CarritoDAO {
 
     private final File archivo;
 
-    public CarritoDAOBinario(String ruta) {
+    public CarritoDAOArchivoBinario(String ruta) {
         this.archivo = new File(ruta + File.separator + "carritos.bin");
         try {
             if (!archivo.exists()) {
                 archivo.getParentFile().mkdirs();
                 archivo.createNewFile();
-                // Guardamos una lista vacía inicial para evitar errores al leer
-                try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
-                    oos.writeObject(new ArrayList<Carrito>());
-                }
             }
         } catch (IOException e) {
             throw new RuntimeException("No se pudo crear el archivo binario", e);
@@ -65,31 +61,24 @@ public class CarritoDAOBinario implements CarritoDAO {
 
     @Override
     public void guardar(Carrito carrito) {
-        // Este método puede actuar como crear individual si se desea, o se deja vacío si no se usa
-        crear(carrito);
+
     }
 
     @Override
     public List<Carrito> listarTodos() {
         if (archivo.length() == 0) return new ArrayList<>();
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(archivo))) {
-            Object obj = ois.readObject();
-            if (obj instanceof List) {
-                return (List<Carrito>) obj;
-            }
-        } catch (EOFException eof) {
-            return new ArrayList<>();
+            return (List<Carrito>) ois.readObject();
         } catch (Exception e) {
-            throw new RuntimeException("Error al leer carritos del archivo binario", e);
+            return new ArrayList<>();
         }
-        return new ArrayList<>();
     }
 
     private void guardarTodos(List<Carrito> carritos) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(archivo))) {
             oos.writeObject(carritos);
         } catch (IOException e) {
-            throw new RuntimeException("Error al guardar carritos en archivo binario", e);
+            throw new RuntimeException("Error al guardar carritos en binario", e);
         }
     }
 }
